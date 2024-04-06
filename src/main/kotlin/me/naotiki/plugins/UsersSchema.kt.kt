@@ -28,11 +28,6 @@ class UserService(private val database: Database) {
         transaction(database) {
             SchemaUtils.create(Users)
         }
-        if (true) {
-        } else {
-
-        }
-
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
