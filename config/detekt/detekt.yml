@@ -1,6 +1,3 @@
-build:
-  maxIssues: 50
-  excludeCorrectable: true
 config:
   validation: true
   warningsAsErrors: true
