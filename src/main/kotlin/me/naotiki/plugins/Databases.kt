@@ -51,10 +51,6 @@ fun Application.configureDatabases() {
         if (true) {
             println("Hello")
         } else {
-
         }
-
-
-
     }
 }
