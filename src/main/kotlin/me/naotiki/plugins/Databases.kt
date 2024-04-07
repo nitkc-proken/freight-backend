@@ -48,5 +48,13 @@ fun Application.configureDatabases() {
             userService.delete(id)
             call.respond(HttpStatusCode.OK)
         }
+        if (true) {
+            println("Hello")
+        } else {
+
+        }
+
+
+
     }
 }
