@@ -30,6 +30,11 @@ jobs:
           reviewdog_version: latest
       - name: detekt
         run: ./gradlew detekt
+      - name: reviewdog suggest
+        if: always()
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: detekt
       - name: reviewdog report
         if: failure()
         env:
