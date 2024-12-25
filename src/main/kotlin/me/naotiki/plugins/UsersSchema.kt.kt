@@ -2,6 +2,7 @@ package me.naotiki.plugins
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable
+import me.naotiki.plugins.UserService.Users
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -42,7 +43,7 @@ class UserService(private val database: Database) {
 
     suspend fun read(id: Int): ExposedUser? {
         return dbQuery {
-            Users.select { Users.id eq id }
+            Users.selectAll().where { Users.id eq id }
                 .map { ExposedUser(it[Users.name], it[Users.age]) }
                 .singleOrNull()
         }

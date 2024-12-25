@@ -8,9 +8,9 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import kotlinx.serialization.Serializable
 
 fun Application.configureSecurity() {
-    data class MySession(val count: Int = 0)
     install(Sessions) {
         cookie<MySession>("MY_SESSION") {
             cookie.extensions["SameSite"] = "lax"
@@ -54,3 +54,5 @@ fun Application.configureSecurity() {
 }
 
 class UserSession(accessToken: String)
+@Serializable
+data class MySession(val count: Int = 0)
