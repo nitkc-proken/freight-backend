@@ -17,9 +17,6 @@ WORKDIR /home/gradle/src
 # Build the fat JAR, Gradle also supports shadow
 # and boot JAR by default.
 RUN gradle buildFatJar --no-daemon
-# Stage 3: Create the Runtime Image
-FROM amazoncorretto:22 AS runtime
+RUN mkdir /app && cp build/libs/*-all.jar /app/fr8-server.jar
 EXPOSE 8080
-RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*-all.jar /app/freight-server.jar
-ENTRYPOINT ["java","-jar","/app/freight-server.jar"]
+ENTRYPOINT ["java","-jar","/app/fr8-server.jar"]

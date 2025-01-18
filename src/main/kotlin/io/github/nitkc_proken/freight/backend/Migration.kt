@@ -9,7 +9,7 @@ import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.FluentConfiguration
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun main() {
+fun main(vararg args:String) {
     val db = getDBConfigFromEnv()
     db.connect()
     migration(db)
@@ -25,9 +25,6 @@ fun migration(dbConfig: DBConfig, baseline: Boolean = false) {
         .baselineOnMigrate(baseline) // 既存のデータベースを初めて移行するときに使用します
         .load()
     transaction() {
-        additionalSQL.forEach {
-            exec(it)
-        }
         flyway.migrate()
     }
 }

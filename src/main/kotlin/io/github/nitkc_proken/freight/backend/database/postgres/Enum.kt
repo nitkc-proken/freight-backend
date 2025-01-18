@@ -13,12 +13,12 @@ class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
 
 typealias EnumKlass = KClass<Permissions>
 
-inline fun EnumKlass.enumKlassToPostgresTypeName(): String {
+fun EnumKlass.enumKlassToPostgresTypeName(): String {
     return simpleName!!.lowercase()
 }
 
 private fun createEnumTypeSchema(enumKlass: EnumKlass): String {
-    return "CREATE TYPE ${enumKlass.enumKlassToPostgresTypeName()} AS ENUM ('${
+    return "CREATE TYPE ${enumKlass.simpleName} AS ENUM ('${
         enumKlass.java.enumConstants.joinToString(
             "', '"
         )
@@ -28,21 +28,21 @@ private fun createEnumTypeSchema(enumKlass: EnumKlass): String {
 private fun createEnumSchemas(enumKlass: EnumKlass): String {
     val name = enumKlass.enumKlassToPostgresTypeName()
     return """
-        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = '$name') THEN
-            ${createEnumTypeSchema(enumKlass)};
-        END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = '$name') THEN
+        ${createEnumTypeSchema(enumKlass)};
+    END IF;
     """.trimIndent()
 }
 
 fun createSafetyEnumTypeSchema(vararg enumKlass: EnumKlass): String {
     return """
-        DO ${'$'}${'$'}
-        BEGIN
-            ${
+    DO ${'$'}${'$'}
+    BEGIN
+${
         enumKlass.joinToString("\n") {
             createEnumSchemas(it)
         }
     }
-        END${'$'}${'$'};
+    END${'$'}${'$'};
     """.trimIndent()
 }

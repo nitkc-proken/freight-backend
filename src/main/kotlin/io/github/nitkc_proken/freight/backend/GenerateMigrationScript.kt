@@ -3,6 +3,9 @@
 package io.github.nitkc_proken.freight.backend
 
 import MigrationUtils
+import MigrationUtils.generateMigrationScript
+import MigrationUtils.statementsRequiredForDatabaseMigration
+import io.github.nitkc_proken.freight.backend.database.additionalSQL
 import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.database.tables
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -10,6 +13,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import org.bouncycastle.jcajce.provider.digest.SHA256
 import org.jetbrains.exposed.sql.ExperimentalDatabaseMigrationApi
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -29,12 +33,27 @@ data class MigrationScriptName(
 @Serializable
 data class MigrationMetadata(
     val latest: MigrationScriptName,
+    val additionalSQLHashed: Int
 )
+
+fun List<String>.joinHash(): Int {
+    val str = this.joinToString()
+    return str.hashCode()
+
+}
 
 @OptIn(ExperimentalSerializationApi::class)
 fun main(vararg args: String) = transaction(getDBConfigFromEnv().connect()) {
+    val metadataFile = File("$MIGRATIONS_DIRECTORY/migration-metadata.json")
 
-    if (!isNeedToMigration()) {
+    val metadata = if (metadataFile.exists()) {
+        Json.decodeFromStream<MigrationMetadata>(metadataFile.inputStream())
+    } else {
+        null
+    }
+    val isOldAdditionalSQL = metadata?.additionalSQLHashed != additionalSQL.joinHash()
+    val shouldMigration = isNeedToMigration() || isOldAdditionalSQL
+    if (!shouldMigration) {
         println("No migration required")
         return@transaction
     }
@@ -44,35 +63,39 @@ fun main(vararg args: String) = transaction(getDBConfigFromEnv().connect()) {
         migrationName = readln()
     } while (migrationName.isNullOrBlank())
 
-    val metadataFile = File("$MIGRATIONS_DIRECTORY/migration-metadata.json")
-
-    val metadata = if (metadataFile.exists()) {
-        Json.decodeFromStream<MigrationMetadata>(metadataFile.inputStream())
-    } else {
-        null
-    }
 
     val nextVersion = metadata?.latest?.version?.plus(1) ?: 1
 
     val newMigration = MigrationScriptName(nextVersion, migrationName)
 
-    generateMigrationScript(
+    val file = generateMigrationScript(
         MigrationScriptName(nextVersion, migrationName).toString(),
+        additionalSQL.takeIf { isOldAdditionalSQL }?.joinToString("\n"),
         *tables,
     )
 
     metadataFile.writeText(
         Json.encodeToString(
-            metadata?.copy(latest = newMigration) ?: MigrationMetadata(newMigration)
+            metadata?.copy(latest = newMigration) ?: MigrationMetadata(newMigration, additionalSQL.joinHash())
         )
     )
 }
 
-fun generateMigrationScript(name: String, vararg tables: Table) {
-    // This will generate a migration script in the path exposed-migration/migrations
-    MigrationUtils.generateMigrationScript(
-        *tables,
-        scriptDirectory = MIGRATIONS_DIRECTORY,
-        scriptName = name
-    )
+fun generateMigrationScript(name: String, preSQL: String? = null, vararg tables: Table): File {
+    val allStatements = statementsRequiredForDatabaseMigration(*tables)
+
+    val migrationScript = File("$MIGRATIONS_DIRECTORY/$name.sql")
+    migrationScript.createNewFile()
+
+    // Clear existing content
+    migrationScript.writeText(if (preSQL != null) "$preSQL\n" else "")
+    // Append statements
+    allStatements.forEach { statement ->
+        // Add semicolon only if it's not already there
+        val conditionalSemicolon = if (statement.last() == ';') "" else ";"
+
+        migrationScript.appendText("$statement$conditionalSemicolon\n")
+    }
+
+    return migrationScript
 }
