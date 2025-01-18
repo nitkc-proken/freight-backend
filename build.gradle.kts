@@ -81,6 +81,7 @@ tasks.register<JavaExec>("applyMigration") {
     group = "application"
     description = "Generate migration script in the path exposed-migration/migrations"
     classpath = sourceSets.main.get().runtimeClasspath
+    standardInput = System.`in`
     mainClass = "io.github.nitkc_proken.freight.backend.MigrationKt"
 }
 
@@ -88,5 +89,6 @@ tasks.register<JavaExec>("generateMigrationScript") {
     group = "application"
     description = "Generate migration script in the path exposed-migration/migrations"
     classpath = sourceSets.main.get().runtimeClasspath
+    standardInput = System.`in`
     mainClass = "io.github.nitkc_proken.freight.backend.GenerateMigrationScriptKt"
 }

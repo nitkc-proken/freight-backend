@@ -2,7 +2,7 @@
 
 
 ```shell
-$ ./gradlew migrate
+$ ./gradlew applyMigration
 ```
 
 ```shell

@@ -3,7 +3,7 @@
 package io.github.nitkc_proken.freight.backend
 
 import MigrationUtils
-import io.github.nitkc_proken.freight.backend.database.dbConfig
+import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.database.tables
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -32,7 +32,8 @@ data class MigrationMetadata(
 )
 
 @OptIn(ExperimentalSerializationApi::class)
-fun main(vararg args: String) = transaction(dbConfig.connect()) {
+fun main(vararg args: String) = transaction(getDBConfigFromEnv().connect()) {
+
     if (!isNeedToMigration()) {
         println("No migration required")
         return@transaction
@@ -40,7 +41,7 @@ fun main(vararg args: String) = transaction(dbConfig.connect()) {
     var migrationName: String?
     do {
         print("what is new migration name? :")
-        migrationName = readlnOrNull()
+        migrationName = readln()
     } while (migrationName.isNullOrBlank())
 
     val metadataFile = File("$MIGRATIONS_DIRECTORY/migration-metadata.json")

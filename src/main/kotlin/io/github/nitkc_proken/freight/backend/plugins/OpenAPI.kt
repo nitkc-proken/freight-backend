@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUuidApi::class)
+
 package io.github.nitkc_proken.freight.backend.plugins
 
 import io.github.smiley4.ktorswaggerui.SwaggerUI
@@ -19,6 +21,8 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.Instant
 import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 fun Application.configureOpenAPI() {
     install(SwaggerUI) {
@@ -26,10 +30,10 @@ fun Application.configureOpenAPI() {
             generator = { type ->
                 type
                     .processKotlinxSerialization({
-                        customProcessor<UUID> {
+                        customProcessor<Uuid> {
                             PrimitiveTypeData(
                                 // needs a (unique) id for our type, overwriting UUID so taking that
-                                id = TypeId.build(UUID::class.qualifiedName!!),
+                                id = TypeId.build(Uuid::class.qualifiedName!!),
                                 // qualified name must be the one of "String".
                                 // The generator currently looks at the qualified name to
                                 // determine the type of the swagger schema :/
@@ -37,7 +41,7 @@ fun Application.configureOpenAPI() {
                                 // simple name can be anything.
                                 // Using uuid here since this will become
                                 // the "title" in the swagger schema.
-                                simpleName = UUID::class.simpleName!!,
+                                simpleName = Uuid::class.simpleName!!,
                                 annotations = mutableListOf(
                                     AnnotationData(
                                         // adding the @Format annotation to our custom type here.
@@ -68,9 +72,9 @@ fun Application.configureOpenAPI() {
             }
         }
         info {
-            title = "Example API"
+            title = "Freight API"
             version = "latest"
-            description = "Example API for testing and demonstration purposes."
+            description = "Freight API"
         }
         server {
             url = "http://localhost:8080"

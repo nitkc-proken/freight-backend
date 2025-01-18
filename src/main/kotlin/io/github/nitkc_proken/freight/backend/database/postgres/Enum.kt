@@ -39,9 +39,9 @@ fun createSafetyEnumTypeSchema(vararg enumKlass: EnumKlass): String {
         DO ${'$'}${'$'}
         BEGIN
             ${
-        enumKlass.map {
+        enumKlass.joinToString("\n") {
             createEnumSchemas(it)
-        }.joinToString("\n")
+        }
     }
         END${'$'}${'$'};
     """.trimIndent()

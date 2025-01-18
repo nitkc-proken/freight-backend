@@ -1,25 +1,30 @@
 package io.github.nitkc_proken.freight.backend
 
+import MigrationUtils
 import io.github.nitkc_proken.freight.backend.database.DBConfig
 import io.github.nitkc_proken.freight.backend.database.additionalSQL
-import io.github.nitkc_proken.freight.backend.database.dbConfig
+import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.database.tables
 import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.configuration.FluentConfiguration
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
-    migration()
+    val db = getDBConfigFromEnv()
+    db.connect()
+    migration(db)
 }
 
-fun isNeedToMigration() = transaction(dbConfig.connect()) {
+fun isNeedToMigration() = transaction() {
     MigrationUtils.statementsRequiredForDatabaseMigration(*tables, withLogs = false).isNotEmpty()
 }
 
-fun migration(baseline: Boolean = false) {
-    val flyway = defaultFlywayConfig
+fun migration(dbConfig: DBConfig, baseline: Boolean = false) {
+    val flyway = dbConfig.toFlywayConfig()
+        .locations("filesystem:$MIGRATIONS_DIRECTORY")
         .baselineOnMigrate(baseline) // 既存のデータベースを初めて移行するときに使用します
         .load()
-    transaction(dbConfig.connect()) {
+    transaction() {
         additionalSQL.forEach {
             exec(it)
         }
@@ -27,8 +32,6 @@ fun migration(baseline: Boolean = false) {
     }
 }
 
-val defaultFlywayConfig = dbConfig.toFlywayConfig()
-    .locations("filesystem:$MIGRATIONS_DIRECTORY")
 
-fun DBConfig.toFlywayConfig() = Flyway.configure()
+fun DBConfig.toFlywayConfig(): FluentConfiguration = Flyway.configure()
     .dataSource(url, user, password)
