@@ -1,6 +1,5 @@
 package io.github.nitkc_proken.freight.backend.database.columntype
 
-
 import io.github.nitkc_proken.freight.backend.database.postgres.PGEnum
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
@@ -15,4 +14,3 @@ inline fun <reified T : Enum<T>> Table.enum(name: String): Column<T> =
             } as String
         )
     }, { PGEnum(T::class.simpleName.toString(), it) })
-

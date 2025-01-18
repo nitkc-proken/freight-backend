@@ -30,7 +30,9 @@ class UsersRoutingKtTest {
         single<TokenRepository> {
             object : TokenRepository {
                 val user = User(
-                    Uuid.random(), "test", Argon2.hash("password")
+                    Uuid.random(),
+                    "test",
+                    Argon2.hash("password")
                 )
                 override suspend fun createToken(user: User, expiresAt: Instant): Token {
                     return Token("test", expiresAt)

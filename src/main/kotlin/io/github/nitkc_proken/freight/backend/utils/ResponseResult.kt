@@ -2,7 +2,6 @@ package io.github.nitkc_proken.freight.backend.utils
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 sealed class ResponseResult(val ok: Boolean) {
     @Serializable

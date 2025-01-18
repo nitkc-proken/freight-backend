@@ -1,7 +1,5 @@
 package io.github.nitkc_proken.freight.backend.auth
 
-import io.github.nitkc_proken.freight.backend.auth.model.LoginCredential
-import io.github.nitkc_proken.freight.backend.utils.ValidatableValue
 import io.ktor.resources.*
 
 @Resource("/auth")

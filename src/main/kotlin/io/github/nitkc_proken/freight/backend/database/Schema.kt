@@ -12,7 +12,6 @@ val tables = arrayOf(
     TunnelSessionsTable,
 )
 
-
 val additionalSQL = buildList {
     add(createSafetyEnumTypeSchema(Permissions::class))
 }

@@ -41,8 +41,11 @@ class ValidationContext {
     val errorMessages: List<String>
         get() = errors.filterNotNull()
     val throwable
-        get() = if (errorMessages.isEmpty()) null
-        else IllegalArgumentException(errorMessages.joinToString())
+        get() = if (errorMessages.isEmpty()) {
+            null
+        } else {
+            IllegalArgumentException(errorMessages.joinToString())
+        }
 
     fun should(condition: Boolean, message: String? = null) {
         if (!condition) {

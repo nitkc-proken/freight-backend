@@ -5,7 +5,6 @@ import io.github.nitkc_proken.freight.backend.entity.UserEntity
 import io.github.nitkc_proken.freight.backend.repository.*
 import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
 import io.github.nitkc_proken.freight.backend.values.Argon2
-import io.github.nitkc_proken.freight.backend.values.Bcrypt
 import org.koin.core.annotation.Single
 import java.util.*
 

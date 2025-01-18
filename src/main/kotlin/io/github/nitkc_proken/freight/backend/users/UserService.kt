@@ -9,7 +9,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Single
-class UserService{
+class UserService {
     fun getUserSelf(user: User): UserResponse {
         return user.toResponse()
     }

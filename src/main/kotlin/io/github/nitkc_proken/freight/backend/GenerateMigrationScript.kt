@@ -31,11 +31,8 @@ data class MigrationMetadata(
     val latest: MigrationScriptName,
 )
 
-
 @OptIn(ExperimentalSerializationApi::class)
 fun main(vararg args: String) = transaction(dbConfig.connect()) {
-
-
     if (!isNeedToMigration()) {
         println("No migration required")
         return@transaction
@@ -45,7 +42,6 @@ fun main(vararg args: String) = transaction(dbConfig.connect()) {
         print("what is new migration name? :")
         migrationName = readlnOrNull()
     } while (migrationName.isNullOrBlank())
-
 
     val metadataFile = File("$MIGRATIONS_DIRECTORY/migration-metadata.json")
 
@@ -69,7 +65,6 @@ fun main(vararg args: String) = transaction(dbConfig.connect()) {
             metadata?.copy(latest = newMigration) ?: MigrationMetadata(newMigration)
         )
     )
-
 }
 
 fun generateMigrationScript(name: String, vararg tables: Table) {

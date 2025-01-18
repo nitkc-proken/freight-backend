@@ -21,4 +21,3 @@ val dbConfig = DBConfig(
     user = "freight",
     password = "freight",
 )
-

@@ -12,12 +12,11 @@ import io.github.smiley4.schemakenerator.core.data.AnnotationData
 import io.github.smiley4.schemakenerator.core.data.PrimitiveTypeData
 import io.github.smiley4.schemakenerator.core.data.TypeId
 import io.github.smiley4.schemakenerator.core.handleNameAnnotation
-import io.github.smiley4.schemakenerator.reflection.processReflection
-import io.ktor.server.application.*
-import io.ktor.server.routing.*
 import io.github.smiley4.schemakenerator.serialization.processKotlinxSerialization
 import io.github.smiley4.schemakenerator.swagger.*
 import io.github.smiley4.schemakenerator.swagger.data.TitleType
+import io.ktor.server.application.*
+import io.ktor.server.routing.*
 import kotlinx.datetime.Instant
 import java.util.UUID
 
@@ -62,7 +61,6 @@ fun Application.configureOpenAPI() {
                         }
                     })
                     .connectSubTypes()
-
                     .handleNameAnnotation()
                     .generateSwaggerSchema()
                     .withTitle(TitleType.SIMPLE)

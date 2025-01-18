@@ -30,7 +30,6 @@ inline fun <reified Resource : Any, reified T : Validatable, reified Success : A
     }
 }
 
-
 @KtorDsl
 @JvmName(name = "getTyped")
 inline fun <reified Resource : Any, reified Success : Any> Route.documentedGet(

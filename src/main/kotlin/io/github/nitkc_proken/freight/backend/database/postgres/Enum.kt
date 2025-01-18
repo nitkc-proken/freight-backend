@@ -4,7 +4,6 @@ import io.github.nitkc_proken.freight.backend.values.Permissions
 import org.postgresql.util.PGobject
 import kotlin.reflect.KClass
 
-
 class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
     init {
         value = enumValue?.name

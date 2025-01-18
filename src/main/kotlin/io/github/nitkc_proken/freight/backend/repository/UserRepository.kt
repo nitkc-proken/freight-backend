@@ -13,13 +13,11 @@ import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 import kotlin.uuid.toKotlinUuid
 
-
 interface UserRepository {
     suspend fun findUserById(id: UUID): User?
     suspend fun findUserByUsername(username: String): User?
     suspend fun createUser(username: String, password: Argon2): User
 }
-
 
 @Serializable
 data class User(
@@ -27,7 +25,6 @@ data class User(
     val username: String,
     val passwordHash: Argon2
 )
-
 
 @OptIn(ExperimentalUuidApi::class)
 fun UserEntity.toModel(): User = User(id.value.toKotlinUuid(), username, passwordHash)

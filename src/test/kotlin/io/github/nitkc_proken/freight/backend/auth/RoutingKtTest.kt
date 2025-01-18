@@ -8,7 +8,6 @@ import io.github.nitkc_proken.freight.backend.repository.User
 import io.github.nitkc_proken.freight.backend.repository.UserRepository
 import io.github.nitkc_proken.freight.backend.testutils.clientWithDefault
 import io.github.nitkc_proken.freight.backend.testutils.configureRoutingTest
-import io.github.nitkc_proken.freight.backend.utils.ValidatableValue
 import io.github.nitkc_proken.freight.backend.values.Argon2
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -23,7 +22,6 @@ import org.koin.dsl.module
 import org.koin.ksp.generated.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -36,7 +34,9 @@ class AuthRoutingKtTest {
         single<UserRepository> {
             object : UserRepository {
                 val user = User(
-                    Uuid.random(), "test", Argon2.hash("password")
+                    Uuid.random(),
+                    "test",
+                    Argon2.hash("password")
                 )
 
                 override suspend fun findUserById(id: UUID): User {
@@ -50,7 +50,6 @@ class AuthRoutingKtTest {
                 override suspend fun createUser(username: String, password: Argon2): User {
                     return user
                 }
-
             }
         }
         single<TokenRepository> {

@@ -1,6 +1,5 @@
 package io.github.nitkc_proken.freight.backend.entity
 
-
 import io.github.nitkc_proken.freight.backend.database.tables.TunnelSessionsTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
