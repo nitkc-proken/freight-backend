@@ -5,7 +5,10 @@ package io.github.nitkc_proken.freight.backend.plugins
 import io.github.smiley4.ktorswaggerui.SwaggerUI
 import io.github.smiley4.ktorswaggerui.data.AuthScheme
 import io.github.smiley4.ktorswaggerui.data.AuthType
+import io.github.smiley4.ktorswaggerui.data.OutputFormat
 import io.github.smiley4.ktorswaggerui.data.kotlinxExampleEncoder
+import io.github.smiley4.ktorswaggerui.dsl.config.PluginConfigDsl
+import io.github.smiley4.ktorswaggerui.routing.ApiSpec
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.github.smiley4.schemakenerator.core.annotations.Format
@@ -19,7 +22,9 @@ import io.github.smiley4.schemakenerator.swagger.*
 import io.github.smiley4.schemakenerator.swagger.data.TitleType
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import io.swagger.v3.core.util.Yaml31
 import kotlinx.datetime.Instant
+import java.io.File
 import java.util.UUID
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -92,15 +97,23 @@ fun Application.configureOpenAPI() {
             }
             defaultSecuritySchemeNames(securitySchemeName)
         }
+        postBuild = { openAPI, id ->
+            val file = File("schema.yaml")
+
+            file.writeText(
+                Yaml31.pretty(openAPI)
+            )
+        }
+        outputFormat = OutputFormat.YAML
     }
     routing {
         // Create a route for the openapi-spec file.
-        route("api.json") {
+        route("schema.yaml") {
             openApiSpec()
         }
         // Create a route for the swagger-ui using the openapi-spec at "/api.json".
         route("swagger") {
-            swaggerUI("/api/api.json")
+            swaggerUI("/api/schema.yaml")
         }
     }
 }
