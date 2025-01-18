@@ -1,9 +1,7 @@
 @file:OptIn(ExperimentalDatabaseMigrationApi::class)
 
-package io.github.nitkc_proken.freight.backend
+package io.github.nitkc_proken.freight.database
 
-import MigrationUtils
-import MigrationUtils.generateMigrationScript
 import MigrationUtils.statementsRequiredForDatabaseMigration
 import io.github.nitkc_proken.freight.backend.database.additionalSQL
 import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
@@ -13,7 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import org.bouncycastle.jcajce.provider.digest.SHA256
 import org.jetbrains.exposed.sql.ExperimentalDatabaseMigrationApi
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction

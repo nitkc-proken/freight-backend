@@ -78,17 +78,22 @@ detekt {
 }
 
 tasks.register<JavaExec>("applyMigration") {
-    group = "application"
-    description = "Generate migration script in the path exposed-migration/migrations"
+    group = "database"
     classpath = sourceSets.main.get().runtimeClasspath
     standardInput = System.`in`
-    mainClass = "io.github.nitkc_proken.freight.backend.MigrationKt"
+    mainClass = "io.github.nitkc_proken.freight.database.MigrationKt"
 }
 
 tasks.register<JavaExec>("generateMigrationScript") {
-    group = "application"
-    description = "Generate migration script in the path exposed-migration/migrations"
+    group = "database"
     classpath = sourceSets.main.get().runtimeClasspath
     standardInput = System.`in`
-    mainClass = "io.github.nitkc_proken.freight.backend.GenerateMigrationScriptKt"
+    mainClass = "io.github.nitkc_proken.freight.database.GenerateMigrationScriptKt"
+}
+
+tasks.register<JavaExec>("seed") {
+    group = "database"
+    classpath = sourceSets.main.get().runtimeClasspath
+    standardInput = System.`in`
+    mainClass = "io.github.nitkc_proken.freight.database.SeedKt"
 }

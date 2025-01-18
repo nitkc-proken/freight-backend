@@ -1,7 +1,7 @@
 package io.github.nitkc_proken.freight.backend.plugins
 
 import io.github.nitkc_proken.freight.backend.database.DBConfig
-import io.github.nitkc_proken.freight.backend.migration
+import io.github.nitkc_proken.freight.database.migration
 import io.ktor.server.application.*
 
 fun Application.configureDatabases() {

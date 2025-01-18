@@ -1,8 +1,7 @@
-package io.github.nitkc_proken.freight.backend
+package io.github.nitkc_proken.freight.database
 
 import MigrationUtils
 import io.github.nitkc_proken.freight.backend.database.DBConfig
-import io.github.nitkc_proken.freight.backend.database.additionalSQL
 import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.database.tables
 import org.flywaydb.core.Flyway
