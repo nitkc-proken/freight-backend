@@ -7,16 +7,16 @@ import io.github.smiley4.ktorswaggerui.data.AuthScheme
 import io.github.smiley4.ktorswaggerui.data.AuthType
 import io.github.smiley4.ktorswaggerui.data.OutputFormat
 import io.github.smiley4.ktorswaggerui.data.kotlinxExampleEncoder
-import io.github.smiley4.ktorswaggerui.dsl.config.PluginConfigDsl
-import io.github.smiley4.ktorswaggerui.routing.ApiSpec
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
+import io.github.smiley4.schemakenerator.core.addDiscriminatorProperty
 import io.github.smiley4.schemakenerator.core.annotations.Format
 import io.github.smiley4.schemakenerator.core.connectSubTypes
 import io.github.smiley4.schemakenerator.core.data.AnnotationData
 import io.github.smiley4.schemakenerator.core.data.PrimitiveTypeData
 import io.github.smiley4.schemakenerator.core.data.TypeId
 import io.github.smiley4.schemakenerator.core.handleNameAnnotation
+import io.github.smiley4.schemakenerator.serialization.addJsonClassDiscriminatorProperty
 import io.github.smiley4.schemakenerator.serialization.processKotlinxSerialization
 import io.github.smiley4.schemakenerator.swagger.*
 import io.github.smiley4.schemakenerator.swagger.data.TitleType
@@ -25,7 +25,6 @@ import io.ktor.server.routing.*
 import io.swagger.v3.core.util.Yaml31
 import kotlinx.datetime.Instant
 import java.io.File
-import java.util.UUID
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -34,7 +33,10 @@ fun Application.configureOpenAPI() {
         schemas {
             generator = { type ->
                 type
+
                     .processKotlinxSerialization({
+
+
                         customProcessor<Uuid> {
                             PrimitiveTypeData(
                                 // needs a (unique) id for our type, overwriting UUID so taking that
@@ -65,15 +67,28 @@ fun Application.configureOpenAPI() {
                                     "instant"
                                 ),
                                 simpleName = String::class.simpleName!!,
-                                qualifiedName = String::class.qualifiedName!!
+                                qualifiedName = String::class.qualifiedName!!,
+                                annotations = mutableListOf(
+                                    AnnotationData(
+                                        // adding the @Format annotation to our custom type here.
+                                        // This way it does not need to be added on every field in the models.
+                                        name = Format::class.qualifiedName!!,
+                                        values = mutableMapOf("format" to "timestamp") // with value "uuid"
+
+                                    )
+                                )
                             )
                         }
                     })
+                    .addJsonClassDiscriminatorProperty()
+                    .addDiscriminatorProperty()
                     .connectSubTypes()
                     .handleNameAnnotation()
                     .generateSwaggerSchema()
+                    .handleSchemaAnnotations()
+                    .handleCoreAnnotations()
                     .withTitle(TitleType.SIMPLE)
-                    .compileReferencingRoot()
+                    .compileReferencing()
             }
         }
         info {

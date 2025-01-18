@@ -18,7 +18,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.auth.model.LoginCredential"
+              type: object
+              properties:
+                username:
+                  type: string
+                  title: String
+                password:
+                  type: string
+                  title: String
+              required:
+              - password
+              - username
+              title: LoginCredential
         required: false
       responses:
         default:
@@ -26,13 +37,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.utils.ResponseResult.Error"
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  message:
+                    type: string
+                    title: String
+                required:
+                - message
+                - ok
+                title: Error
         "200":
           headers: {}
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.utils.ResponseResult.Success"
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  data:
+                    $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.auth.UserWithTokenResponse"
+                required:
+                - data
+                - ok
+                title: Success
       deprecated: false
   /api/users/me:
     get:
@@ -44,49 +76,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.utils.ResponseResult.Error"
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  message:
+                    type: string
+                    title: String
+                required:
+                - message
+                - ok
+                title: Error
         "200":
           headers: {}
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.utils.ResponseResult.Success"
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  data:
+                    $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.users.UserResponse"
+                required:
+                - data
+                - ok
+                title: Success
       deprecated: false
       security:
       - AppDefaultSecurityScheme: []
 components:
   schemas:
-    io.github.nitkc_proken.freight.backend.auth.model.LoginCredential:
-      type: object
-      properties:
-        username:
-          type: string
-          title: String
-        password:
-          type: string
-          title: String
-      required:
-      - password
-      - username
-      title: LoginCredential
-    io.github.nitkc_proken.freight.backend.utils.ResponseResult.Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          title: Boolean
-        message:
-          type: string
-          title: String
-      required:
-      - message
-      - ok
-      title: Error
     io.github.nitkc_proken.freight.backend.auth.UserWithTokenResponse:
       type: object
       properties:
         userId:
           type: string
+          format: uuid
           title: Uuid
         username:
           type: string
@@ -106,28 +134,18 @@ components:
           title: String
         expiresAt:
           type: string
+          format: timestamp
           title: String#instant
       required:
       - expiresAt
       - token
       title: Token
-    io.github.nitkc_proken.freight.backend.utils.ResponseResult.Success:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          title: Boolean
-        data:
-          $ref: "#/components/schemas/io.github.nitkc_proken.freight.backend.users.UserResponse"
-      required:
-      - data
-      - ok
-      title: Success
     io.github.nitkc_proken.freight.backend.users.UserResponse:
       type: object
       properties:
         id:
           type: string
+          format: uuid
           title: Uuid
         username:
           type: string

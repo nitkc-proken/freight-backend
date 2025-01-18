@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class ResponseResult(val ok: Boolean) {
     @Serializable
-    data class Success<out T : Any>(
+    data class Success<T : Any>(
         val data: T
     ) : ResponseResult(true)
 
