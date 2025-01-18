@@ -34,10 +34,9 @@ data class MigrationMetadata(
 
 @OptIn(ExperimentalSerializationApi::class)
 fun main(vararg args: String) = transaction(dbConfig.connect()) {
-    val isNeedToMigration =
-        MigrationUtils.statementsRequiredForDatabaseMigration(*tables, withLogs = false).isNotEmpty()
 
-    if (!isNeedToMigration) {
+
+    if (!isNeedToMigration()) {
         println("No migration required")
         return@transaction
     }

@@ -3,6 +3,7 @@ package io.github.nitkc_proken.freight.backend
 import io.github.nitkc_proken.freight.backend.database.DBConfig
 import io.github.nitkc_proken.freight.backend.database.dbConfig
 import io.github.nitkc_proken.freight.backend.database.additionalSQL
+import io.github.nitkc_proken.freight.backend.database.tables
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -10,6 +11,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
     migration()
+}
+
+fun isNeedToMigration() = transaction(dbConfig.connect()) {
+    MigrationUtils.statementsRequiredForDatabaseMigration(*tables, withLogs = false).isNotEmpty()
 }
 
 fun migration(baseline: Boolean = false) {
