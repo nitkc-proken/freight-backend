@@ -11,7 +11,6 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    rootPath = "/api"
     configureOpenAPI()
 
     configureKoin()
