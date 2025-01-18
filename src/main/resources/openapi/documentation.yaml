@@ -1,14 +1,40 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
-  title: "Application API"
-  description: "Application API"
+  title: "io_github_nitkc_proken_freight_backend API"
+  description: "io_github_nitkc_proken_freight_backend API"
   version: "1.0.0"
 servers:
-  - url: "http://0.0.0.0:8080"
+- url: "https://io_github_nitkc_proken_freight_backend"
 paths:
-  /:
+  /callback:
     get:
-      description: "Hello World!"
+      description: ""
+      responses:
+        "302":
+          description: "Found <br> Redirect"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "/hello"
+  /login:
+    get:
+      description: ""
+      responses:
+        "302":
+          description: "Found <br> Redirect"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "/callback"
+  /session/increment:
+    get:
+      description: ""
       responses:
         "200":
           description: "OK"
@@ -18,6 +44,47 @@ paths:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Hello World!"
+                  value: ""
+  /auth/login:
+    post:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Error"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Success_? extends Token"
 components:
-  schemas: {}
+  schemas:
+    Error:
+      type: "object"
+      properties:
+        message:
+          type: "string"
+        ok:
+          type: "false"
+      required:
+      - "message"
+      - "ok"
+    Success:
+      type: "object"
+      properties:
+        ok:
+          type: "boolean"
+      required:
+      - "data"
+      - "ok"
+    Success_? extends Token:
+      type: "object"
+      properties:
+        data:
+          type: "object"
+        ok:
+          type: "boolean"

@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15.3-alpine
+    ports:
+      - "15432:5432"
+    volumes:
+      #- "./db_data/init:/docker-entrypoint-initdb.d"
+      - "postgres_db:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: freight
+      POSTGRES_PASSWORD: freight
+      POSTGRES_DB: freight
+
+volumes:
+  postgres_db:
+  minio_bucket:

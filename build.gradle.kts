@@ -1,8 +1,10 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
-    id("io.ktor.plugin") version "3.0.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
-    id("io.gitlab.arturbosch.detekt") version ("1.23.7")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.detekt)
+
+    alias(libs.plugins.ksp)
 }
 
 group = "me.naotiki"
@@ -20,33 +22,71 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-openapi")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("org.jetbrains.exposed:exposed-core:0.57.0")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.57.0")
-    implementation("org.jetbrains.exposed:exposed-dao:0.57.0")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.57.0")
-    implementation("com.h2database:h2:2.2.220")
-    implementation("io.ktor:ktor-server-resources")
-    implementation("io.ktor:ktor-server-sessions-jvm")
-    implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("io.ktor:ktor-client-core-jvm")
-    implementation("io.ktor:ktor-client-apache-jvm")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:1.5.15")
+    implementation(libs.ktx.datetime)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.openapi)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.kotlin.datetime)
+    implementation(libs.exposed.migration)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.database.postgresql)
+    implementation(libs.postgresql)
+    implementation(libs.ktor.resources)
+    implementation(libs.ktor.sessions)
+    implementation(libs.ktor.auth)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.apache)
+    implementation(libs.ktor.client.contentnegotiation)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.logback)
+    implementation("io.github.smiley4:schema-kenerator-core:1.6.3")
+    implementation("io.github.smiley4:schema-kenerator-reflection:1.6.3")
+    implementation("io.github.smiley4:schema-kenerator-serialization:1.6.3")
+    implementation("io.github.smiley4:schema-kenerator-swagger:1.6.3")
+    implementation("io.github.smiley4:ktor-swagger-ui:4.1.5")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.slf4j)
+    implementation(libs.koin.annotations)
 
-    testImplementation("io.ktor:ktor-server-test-host")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.1.0")
+    testImplementation(libs.ktor.test)
+
+    ksp(libs.koin.ksp)
+
+    implementation(libs.spring.security.web)
+    implementation(libs.bcprov.jdk18on)
+    //implementation(libs.spring.security.crypto)
+
+    detektPlugins(libs.detekt.formatting)
+
+    testImplementation(libs.ktor.test)
+    testImplementation(libs.kotlin.test)
+
 }
 
 // Linter
 detekt {
-    toolVersion = "1.23.7"
+    toolVersion = libs.versions.detekt.get()
     config.setFrom(file("config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
     autoCorrect = true
+}
+
+tasks.register<JavaExec>("applyMigration") {
+    group = "application"
+    description = "Generate migration script in the path exposed-migration/migrations"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass = "io.github.nitkc_proken.freight.backend.MigrationKt"
+}
+
+tasks.register<JavaExec>("generateMigrationScript") {
+    group = "application"
+    description = "Generate migration script in the path exposed-migration/migrations"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass = "io.github.nitkc_proken.freight.backend.GenerateMigrationScriptKt"
 }

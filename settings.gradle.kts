@@ -1,1 +1,1 @@
-rootProject.name = "me.naotiki.docker-sys"
+rootProject.name = "io.github.nitkc_proken.freight.backend"
