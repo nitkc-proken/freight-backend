@@ -18,7 +18,7 @@ class TokenRepositoryImpl : TokenRepository {
         }.toModel()
     }
 
-    override suspend fun getUserFromToken(token: String): User? {
-        return TokenEntity.findById(token)?.user?.toModel()
+    override suspend fun getUserFromToken(token: String): User? = suspendTransaction {
+        TokenEntity.findById(token)?.user?.toModel()
     }
 }
