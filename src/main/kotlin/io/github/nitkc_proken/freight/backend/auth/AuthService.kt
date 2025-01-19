@@ -8,7 +8,6 @@ import io.github.nitkc_proken.freight.backend.repository.UserRepository
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import org.koin.core.annotation.Single
-import java.time.Period
 import kotlin.time.Duration.Companion.days
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -34,7 +33,9 @@ class AuthService(
         return user.withToken(token)
     }
 
-    fun logout() = Unit
+    suspend fun logout(token:String): Boolean {
+        return tokenRepository.expireTokenFromUser(token)
+    }
 
     fun register() = Unit
 }

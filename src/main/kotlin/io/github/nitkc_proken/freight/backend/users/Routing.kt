@@ -1,5 +1,6 @@
 package io.github.nitkc_proken.freight.backend.users
 
+import io.github.nitkc_proken.freight.backend.plugins.UserWithToken
 import io.github.nitkc_proken.freight.backend.repository.User
 import io.github.nitkc_proken.freight.backend.utils.documentedGet
 import io.github.nitkc_proken.freight.backend.utils.responseError
@@ -15,10 +16,10 @@ fun Application.usersRouting() {
     routing {
         authenticate {
             documentedGet<Users.Me, UserResponse> {
-                val principal = call.principal<User>() ?: return@documentedGet call.respond(
+                val principal = call.principal<UserWithToken>() ?: return@documentedGet call.respond(
                     responseError("User not found")
                 )
-                call.respond(userService.getUserSelf(principal).toSuccess())
+                call.respond(userService.getUserSelf(principal.user).toSuccess())
             }
         }
     }

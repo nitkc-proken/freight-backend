@@ -66,6 +66,47 @@ paths:
                 - ok
                 title: Success
       deprecated: false
+  /api/auth/logout:
+    post:
+      tags: []
+      parameters: []
+      responses:
+        default:
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  message:
+                    type: string
+                    title: String
+                required:
+                - message
+                - ok
+                title: Error
+        "200":
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  data:
+                    type: "null"
+                    title: Unit
+                required:
+                - ok
+                title: Success
+      deprecated: false
+      security:
+      - AppDefaultSecurityScheme: []
   /api/users/me:
     get:
       tags: []

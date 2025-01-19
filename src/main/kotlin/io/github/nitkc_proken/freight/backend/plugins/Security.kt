@@ -1,6 +1,7 @@
 package io.github.nitkc_proken.freight.backend.plugins
 
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
+import io.github.nitkc_proken.freight.backend.repository.User
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
@@ -17,8 +18,14 @@ fun Application.configureSecurity() {
     authentication {
         bearer {
             authenticate {
-                tokenRepository.getUserFromToken(it.token)
+                val user = tokenRepository.getUserFromToken(it.token) ?: return@authenticate null
+                UserWithToken(user, it.token)
             }
         }
     }
 }
+
+data class UserWithToken(
+    val user: User,
+    val token: String
+)

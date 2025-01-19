@@ -4,9 +4,7 @@ import io.github.nitkc_proken.freight.backend.entity.TokenEntity
 import io.github.nitkc_proken.freight.backend.repository.*
 import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
 import kotlinx.datetime.Instant
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.koin.core.annotation.Single
-import kotlin.uuid.ExperimentalUuidApi
 
 @Single
 class TokenRepositoryImpl : TokenRepository {
@@ -20,5 +18,11 @@ class TokenRepositoryImpl : TokenRepository {
 
     override suspend fun getUserFromToken(token: String): User? = suspendTransaction {
         TokenEntity.findById(token)?.user?.toModel()
+    }
+
+    override suspend fun expireTokenFromUser(token: String): Boolean = suspendTransaction {
+        val tokenEntity = TokenEntity.findById(token)
+        tokenEntity?.delete() ?: return@suspendTransaction false
+        true
     }
 }
