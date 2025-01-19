@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
-const val MIGRATIONS_DIRECTORY = "migrations" // Location of migration scripts
+const val MIGRATIONS_DIRECTORY = "./migrations" // Location of migration scripts
 
 @Serializable
 data class MigrationScriptName(
