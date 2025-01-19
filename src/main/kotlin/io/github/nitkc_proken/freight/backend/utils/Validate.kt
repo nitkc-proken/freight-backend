@@ -8,9 +8,9 @@ value class ValidatableValue<T : Validatable>(private val value: T) {
     private fun validateWithContext(): ValidationContext {
         val ctx = ValidationContext()
         with(
-            value
+            ctx
         ) {
-            ctx.validate()
+            value.validate()
         }
         return ctx
     }
@@ -59,5 +59,10 @@ class ValidationContext {
 }
 
 interface Validatable {
-    fun ValidationContext.validate()
+    context(ValidationContext)
+    fun validate()
+}
+
+fun <T : Validatable> T.validatable(): ValidatableValue<T> {
+    return ValidatableValue(this)
 }

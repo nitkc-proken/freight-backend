@@ -16,8 +16,8 @@ data class DBConfig(
             password = password,
         )
     }
-
-    override fun ValidationContext.validate() {
+    context(ValidationContext)
+    override fun validate() {
         should(url.isNotBlank())
         should(user.isNotBlank())
         should(password.isNotBlank())

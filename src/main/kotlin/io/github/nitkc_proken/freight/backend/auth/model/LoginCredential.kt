@@ -9,7 +9,8 @@ data class LoginCredential(
     val username: String,
     val password: String
 ) : Validatable {
-    override fun ValidationContext.validate() {
+    context(ValidationContext)
+    override fun validate() {
         should(username.isNotBlank())
         should(password.isNotBlank())
     }

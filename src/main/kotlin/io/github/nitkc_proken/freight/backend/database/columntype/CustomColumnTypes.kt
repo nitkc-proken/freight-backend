@@ -13,7 +13,7 @@ fun Table.argon2(columnName: String): Column<Argon2> = varchar(columnName, Argon
     Argon2.fromHashedString(it)
 }, { it.hashed })
 
-fun Table.ipv4Address(name: String) = integer(name).transform({ IPv4Address(it) }, { it.value })
+fun Table.ipv4Address(name: String) = uinteger(name).transform({ IPv4Address(it) }, { it.value })
 
 fun Table.subnetMaskLength(name: String) = integer(name).transform({ SubnetMaskLength(it) }, { it.value })
 

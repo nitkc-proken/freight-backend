@@ -21,6 +21,12 @@ repositories {
     mavenCentral()
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-receivers")
+    }
+}
+
 dependencies {
     implementation(libs.ktx.datetime)
     implementation(libs.ktor.server.core)
@@ -66,6 +72,9 @@ dependencies {
 
     testImplementation(libs.ktor.test)
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
 
 }
 
