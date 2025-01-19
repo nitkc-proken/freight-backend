@@ -81,6 +81,9 @@ dependencies {
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.property)
+    testImplementation(libs.kotest.koin)
+    testImplementation(libs.kotest.assertions.ktor)
+    testImplementation(libs.koin.test)
 
 }
 

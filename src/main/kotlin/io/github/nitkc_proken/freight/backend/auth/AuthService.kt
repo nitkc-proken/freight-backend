@@ -19,7 +19,7 @@ class AuthService(
     private val tokenRepository: TokenRepository
 ) {
     companion object {
-        private val TokenExpires = Period.ofYears(1)
+        val TokenExpires = 365.days
     }
 
     suspend fun login(credential: LoginCredential): UserWithTokenResponse? {
@@ -30,7 +30,7 @@ class AuthService(
         ) {
             return null
         }
-        val token = tokenRepository.createToken(user, Clock.System.now() + 365.days)
+        val token = tokenRepository.createToken(user, Clock.System.now() + TokenExpires)
         return user.withToken(token)
     }
 

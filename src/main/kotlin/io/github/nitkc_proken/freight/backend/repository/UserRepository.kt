@@ -30,4 +30,4 @@ data class User(
 fun UserEntity.toModel(): User = User(id.value.toKotlinUuid(), username, passwordHash)
 
 @OptIn(ExperimentalUuidApi::class)
-fun User.toEntity(): UserEntity = UserEntity(EntityID(id.toJavaUuid(), UsersTable))
+fun User.toEntity(): UserEntity = UserEntity.wrap(EntityID(id.toJavaUuid(), UsersTable),null)

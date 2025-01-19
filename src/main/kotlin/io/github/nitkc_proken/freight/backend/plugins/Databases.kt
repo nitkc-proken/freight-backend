@@ -5,7 +5,6 @@ import io.github.nitkc_proken.freight.database.migration
 import io.ktor.server.application.*
 
 fun Application.configureDatabases() {
-    environment.config
     val url = environment.config.property("storage.jdbcURL").getString()
     val user = environment.config.property("storage.user").getString()
     val password = environment.config.property("storage.password").getString()

@@ -4,7 +4,6 @@ import io.github.nitkc_proken.freight.backend.database.tables.TokensTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 
 class TokenEntity(id: EntityID<String>) : Entity<String>(id) {
     companion object : EntityClass<String, TokenEntity>(TokensTable)

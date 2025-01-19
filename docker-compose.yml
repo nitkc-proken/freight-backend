@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: freight
       POSTGRES_DB: freight
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U freight" ]
       interval: 1s
 volumes:
   postgres_db:
