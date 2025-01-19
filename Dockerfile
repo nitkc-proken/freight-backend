@@ -24,4 +24,4 @@ RUN mkdir /app
 COPY migrations /app/migrations
 COPY --from=build /home/gradle/src/build/libs/*-all.jar /app/freight-server.jar
 WORKDIR /app
-ENTRYPOINT ["java","-jar","/app/freight-server.jar"]
+ENTRYPOINT ["java","-jar","./freight-server.jar"]
