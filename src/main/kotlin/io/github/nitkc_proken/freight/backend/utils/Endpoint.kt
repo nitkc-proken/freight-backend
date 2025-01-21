@@ -3,9 +3,9 @@ package io.github.nitkc_proken.freight.backend.utils
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.github.smiley4.ktorswaggerui.dsl.routing.documentation
 import io.ktor.http.*
-import io.ktor.server.routing.*
 import io.ktor.server.resources.*
 import io.ktor.server.resources.post
+import io.ktor.server.routing.*
 import io.ktor.utils.io.*
 
 @KtorDsl
@@ -18,6 +18,7 @@ inline fun <reified Resource : Any, reified T : Validatable, reified Success> Ro
         response {
             default {
                 body<ResponseResult.Error>()
+                description = "Error"
             }
             HttpStatusCode.OK to {
                 body<ResponseResult.Success<Success>>()
@@ -37,6 +38,7 @@ inline fun <reified Resource : Any, reified Success> Route.documentedPost(
     noinline builder: OpenApiRoute.() -> Unit = {
         response {
             default {
+                description = "Error"
                 body<ResponseResult.Error>()
             }
             HttpStatusCode.OK to {
@@ -58,6 +60,7 @@ inline fun <reified Resource : Any, reified Success : Any> Route.documentedGet(
         response {
             default {
                 body<ResponseResult.Error>()
+                description = "Error"
             }
             HttpStatusCode.OK to {
                 body<ResponseResult.Success<Success>>()
