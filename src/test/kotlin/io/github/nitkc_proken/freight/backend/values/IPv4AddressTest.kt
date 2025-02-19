@@ -1,15 +1,13 @@
 package io.github.nitkc_proken.freight.backend.values
 
-import io.github.nitkc_proken.freight.backend.utils.Validatable
 import io.github.nitkc_proken.freight.backend.utils.ValidatableValue
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.ipAddressV4
 import io.kotest.property.arbitrary.ipAddressV6
-import io.kotest.property.arbitrary.merge
 import io.kotest.property.checkAll
 
 class IPv4AddressTest : StringSpec({
@@ -34,7 +32,9 @@ class IPv4AddressTest : StringSpec({
         checkAll(
             Arb.ipAddressV4()
         ) {
-            ValidatableValue(IPv4Address.fromStringOrNull(it).shouldNotBeNull()).validate()
+            shouldNotThrow<IllegalArgumentException> {
+                ValidatableValue(IPv4Address.fromStringOrNull(it).shouldNotBeNull()).validate()
+            }
         }
     }
 })

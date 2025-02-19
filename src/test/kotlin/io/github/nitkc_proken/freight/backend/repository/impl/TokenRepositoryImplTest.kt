@@ -1,11 +1,12 @@
 package io.github.nitkc_proken.freight.backend.repository.impl
 
-import io.github.nitkc_proken.freight.backend.auth.AuthService
+import io.github.nitkc_proken.freight.backend.feature.auth.AuthService
 import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.database.tables.UsersTable
 import io.github.nitkc_proken.freight.backend.entity.UserEntity
 import io.github.nitkc_proken.freight.backend.plugins.KoinModule
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
+import io.github.nitkc_proken.freight.backend.repository.User.Companion.toModel
 import io.github.nitkc_proken.freight.backend.repository.toModel
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.StringSpec

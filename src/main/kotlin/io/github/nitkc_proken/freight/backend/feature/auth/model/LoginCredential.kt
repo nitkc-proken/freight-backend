@@ -1,4 +1,4 @@
-package io.github.nitkc_proken.freight.backend.auth.model
+package io.github.nitkc_proken.freight.backend.feature.auth.model
 
 import io.github.nitkc_proken.freight.backend.utils.Validatable
 import io.github.nitkc_proken.freight.backend.utils.ValidationContext

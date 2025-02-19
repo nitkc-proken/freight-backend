@@ -8,7 +8,7 @@ value class Bcrypt private constructor(
 ) {
     companion object {
         private val bCryptEncoder = BCryptPasswordEncoder()
-        const val BCRYPT_LENGTH = 60
+        const val LENGTH = 60
         fun fromHashedString(string: String): Bcrypt {
             return Bcrypt(string)
         }

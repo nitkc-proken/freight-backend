@@ -2,11 +2,10 @@
 
 package io.github.nitkc_proken.freight.backend.plugins
 
+import io.github.nitkc_proken.freight.backend.utils.ResponseResult
+import io.github.nitkc_proken.freight.backend.values.NetworkAddressWithMask
 import io.github.smiley4.ktorswaggerui.SwaggerUI
-import io.github.smiley4.ktorswaggerui.data.AuthScheme
-import io.github.smiley4.ktorswaggerui.data.AuthType
-import io.github.smiley4.ktorswaggerui.data.OutputFormat
-import io.github.smiley4.ktorswaggerui.data.kotlinxExampleEncoder
+import io.github.smiley4.ktorswaggerui.data.*
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.github.smiley4.schemakenerator.core.addDiscriminatorProperty
@@ -19,12 +18,15 @@ import io.github.smiley4.schemakenerator.core.handleNameAnnotation
 import io.github.smiley4.schemakenerator.serialization.addJsonClassDiscriminatorProperty
 import io.github.smiley4.schemakenerator.serialization.processKotlinxSerialization
 import io.github.smiley4.schemakenerator.swagger.*
+import io.github.smiley4.schemakenerator.swagger.data.RefType
 import io.github.smiley4.schemakenerator.swagger.data.TitleType
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.swagger.v3.core.util.Yaml31
 import kotlinx.datetime.Instant
+import kotlinx.serialization.json.Json
 import java.io.File
+import kotlin.reflect.typeOf
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -34,67 +36,51 @@ fun Application.configureOpenAPI() {
             generator = { type ->
                 type
 
-                    .processKotlinxSerialization({
-
-
+                    .processKotlinxSerialization {
+                        customProcessor<NetworkAddressWithMask> {
+                            createDefaultPrimitiveTypeData<NetworkAddressWithMask>("string", "ipv4-cidr", "10.0.0.0/8")
+                        }
                         customProcessor<Uuid> {
-                            PrimitiveTypeData(
-                                // needs a (unique) id for our type, overwriting UUID so taking that
-                                id = TypeId.build(Uuid::class.qualifiedName!!),
-                                // qualified name must be the one of "String".
-                                // The generator currently looks at the qualified name to
-                                // determine the type of the swagger schema :/
-                                qualifiedName = String::class.qualifiedName!!,
-                                // simple name can be anything.
-                                // Using uuid here since this will become
-                                // the "title" in the swagger schema.
-                                simpleName = Uuid::class.simpleName!!,
-                                annotations = mutableListOf(
-                                    AnnotationData(
-                                        // adding the @Format annotation to our custom type here.
-                                        // This way it does not need to be added on every field in the models.
-                                        name = Format::class.qualifiedName!!,
-                                        values = mutableMapOf("format" to "uuid") // with value "uuid"
-                                    )
-                                )
-                            )
+                            createDefaultPrimitiveTypeData<Uuid>("string", "uuid")
                         }
                         customProcessor<Instant> {
-                            PrimitiveTypeData(
-                                id = TypeId(
-                                    String::class.qualifiedName!!,
-                                    emptyList(),
-                                    "instant"
-                                ),
-                                simpleName = String::class.simpleName!!,
-                                qualifiedName = String::class.qualifiedName!!,
-                                annotations = mutableListOf(
-                                    AnnotationData(
-                                        // adding the @Format annotation to our custom type here.
-                                        // This way it does not need to be added on every field in the models.
-                                        name = Format::class.qualifiedName!!,
-                                        values = mutableMapOf("format" to "timestamp") // with value "uuid"
-
-                                    )
-                                )
-                            )
+                            createDefaultPrimitiveTypeData<Instant>("string", "timestamp")
                         }
-                    })
+                    }
                     .addJsonClassDiscriminatorProperty()
                     .addDiscriminatorProperty()
                     .connectSubTypes()
                     .handleNameAnnotation()
                     .generateSwaggerSchema()
-                    .handleSchemaAnnotations()
                     .handleCoreAnnotations()
+                    .customizeTypes { typeData, typeSchema ->
+                        typeData.annotations.find { it.name == "type_format_annotation" }?.also { annotation ->
+                            typeSchema.format = annotation.values["format"]?.toString()
+                            typeSchema.types = setOf(annotation.values["type"]?.toString())
+                            val example = annotation.values["example"]
+                            if (example != null) {
+                                typeSchema.example = example.toString()
+                            }
+                        }
+                        if (typeData.qualifiedName == ResponseResult.Error::class.qualifiedName) {
+                            typeSchema.example =
+                                Json.encodeToString(
+                                    ResponseResult.Error.serializer(),
+                                    ResponseResult.Error("Error Message")
+                                )
+                        }
+                    }
+                    .handleSchemaAnnotations()
                     .withTitle(TitleType.SIMPLE)
-                    .compileReferencing()
+                    .compileReferencing(RefType.OPENAPI_SIMPLE)
+
             }
         }
         info {
             title = "Freight API"
             version = "latest"
             description = "Freight API"
+            version = "1.0.0"
         }
         server {
             url = "http://localhost:8080"
@@ -131,4 +117,27 @@ fun Application.configureOpenAPI() {
             swaggerUI("/api/schema.yaml")
         }
     }
+}
+
+private inline fun <reified T> createDefaultPrimitiveTypeData(
+    type: String,
+    format: String,
+    example: Any? = null,
+): PrimitiveTypeData {
+    return PrimitiveTypeData(
+        id = TypeId.build(T::class.qualifiedName!!),
+        simpleName = T::class.simpleName!!,
+        qualifiedName = T::class.qualifiedName!!,
+        annotations = mutableListOf(
+            AnnotationData(
+                name = "type_format_annotation",
+                values = mutableMapOf(
+                    "type" to type,
+                    "format" to format,
+                    "example" to example,
+                ),
+                annotation = null,
+            ),
+        ),
+    )
 }

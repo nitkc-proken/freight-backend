@@ -6,7 +6,7 @@ import io.github.nitkc_proken.freight.backend.repository.TokenRepository
 import io.github.nitkc_proken.freight.backend.repository.User
 import io.github.nitkc_proken.freight.backend.testutils.clientWithDefault
 import io.github.nitkc_proken.freight.backend.testutils.configureRoutingTest
-import io.github.nitkc_proken.freight.backend.users.usersModule
+import io.github.nitkc_proken.freight.backend.feature.users.usersModule
 import io.github.nitkc_proken.freight.backend.values.Argon2
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -38,8 +38,12 @@ class UsersRoutingKtTest {
                     return Token("test", expiresAt)
                 }
 
-                override suspend fun getUserFromToken(token: String): User {
+                override suspend fun getUserFromValidToken(token: String): User {
                     return user
+                }
+
+                override suspend fun expireTokenFromUser(token: String): Boolean {
+                    TODO("Not yet implemented")
                 }
             }
         }

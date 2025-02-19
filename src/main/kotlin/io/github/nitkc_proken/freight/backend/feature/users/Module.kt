@@ -1,4 +1,4 @@
-package io.github.nitkc_proken.freight.backend.users
+package io.github.nitkc_proken.freight.backend.feature.users
 
 import io.ktor.server.application.*
 

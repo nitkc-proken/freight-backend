@@ -1,6 +1,7 @@
-package io.github.nitkc_proken.freight.backend.auth
+package io.github.nitkc_proken.freight.backend.feature.auth
 
-import io.github.nitkc_proken.freight.backend.auth.model.LoginCredential
+import io.github.nitkc_proken.freight.backend.database.tables.UsersTable.passwordHash
+import io.github.nitkc_proken.freight.backend.feature.auth.model.LoginCredential
 import io.github.nitkc_proken.freight.backend.repository.Token
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
 import io.github.nitkc_proken.freight.backend.repository.User
@@ -22,18 +23,16 @@ class AuthService(
     }
 
     suspend fun login(credential: LoginCredential): UserWithTokenResponse? {
-        val user = userRepository.findUserByUsername(credential.username)
-        if (user?.let {
-                it.passwordHash matches credential.password
-            } != true
-        ) {
+        val (user, passwordHash) = userRepository.getUserWithPasswordHash(credential.username) ?: return null
+
+        if (!(passwordHash matches credential.password)) {
             return null
         }
         val token = tokenRepository.createToken(user, Clock.System.now() + TokenExpires)
         return user.withToken(token)
     }
 
-    suspend fun logout(token:String): Boolean {
+    suspend fun logout(token: String): Boolean {
         return tokenRepository.expireTokenFromUser(token)
     }
 

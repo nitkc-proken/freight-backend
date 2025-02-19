@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 interface TokenRepository {
     suspend fun createToken(user: User, expiresAt: Instant): Token
-    suspend fun getUserFromToken(token: String): User?
+    suspend fun getUserFromValidToken(token: String): User?
     suspend fun expireTokenFromUser(token: String): Boolean
 }
 

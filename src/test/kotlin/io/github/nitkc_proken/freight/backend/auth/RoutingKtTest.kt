@@ -1,6 +1,7 @@
 package io.github.nitkc_proken.freight.backend.auth
 
-import io.github.nitkc_proken.freight.backend.auth.model.LoginCredential
+import io.github.nitkc_proken.freight.backend.feature.auth.model.LoginCredential
+import io.github.nitkc_proken.freight.backend.feature.auth.authModule
 import io.github.nitkc_proken.freight.backend.plugins.KoinModule
 import io.github.nitkc_proken.freight.backend.repository.Token
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
@@ -57,7 +58,11 @@ class AuthRoutingKtTest {
                 override suspend fun createToken(user: User, expiresAt: Instant): Token {
                     return Token("test", expiresAt)
                 }
-                override suspend fun getUserFromToken(token: String): User? {
+                override suspend fun getUserFromValidToken(token: String): User? {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun expireTokenFromUser(token: String): Boolean {
                     TODO("Not yet implemented")
                 }
             }

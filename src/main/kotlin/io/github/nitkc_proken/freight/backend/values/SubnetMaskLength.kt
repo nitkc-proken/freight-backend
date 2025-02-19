@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @JvmInline
-value class SubnetMaskLength(val value: Int) : Validatable {
+value class SubnetMaskLength(val value: UByte) : Validatable {
     context(ValidationContext)
     override fun validate() {
-        should(value in 0..32, "SubnetMaskLength must be in 0..32")
+        should(value in 0u..32u, "SubnetMaskLength must be in 0..32 but $value")
     }
 
     fun toBitMask(): UInt {
-        return (0xFFFFFFFFu shl (32 - value))
+        return (0xFFFFFFFFu shl ((32u - value).toInt()))
     }
 }

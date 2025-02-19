@@ -56,6 +56,18 @@ class ValidationContext {
     fun shouldNot(condition: Boolean, message: String? = null) {
         should(!condition, message)
     }
+
+    fun String.canSplitBy(
+        delimiter: String,
+        size: Int,
+        condition: (String.(index: Int) -> Boolean)? = null
+    ): Boolean = this.split(delimiter).let { list ->
+        list.size == size &&
+            (
+                condition == null || list.mapIndexed { index, element -> condition(element, index) }
+                    .all { it }
+                )
+    }
 }
 
 interface Validatable {

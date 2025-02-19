@@ -13,5 +13,5 @@ sealed class ResponseResult(val ok: Boolean) {
     data class Error(val message: String) : ResponseResult(false)
 }
 
-fun <T> T.toSuccess(): ResponseResult.Success<T> = ResponseResult.Success(this)
+fun <T> T.wrapSuccess(): ResponseResult.Success<T> = ResponseResult.Success(this)
 fun responseError(message: String): ResponseResult.Error = ResponseResult.Error(message)
