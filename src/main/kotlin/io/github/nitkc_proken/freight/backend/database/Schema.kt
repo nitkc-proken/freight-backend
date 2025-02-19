@@ -10,6 +10,7 @@ val tables = arrayOf(
     NetworkMembersTable,
     TokensTable,
     TunnelSessionsTable,
+    ContainersTable,
 )
 
 val additionalSQL = buildList {

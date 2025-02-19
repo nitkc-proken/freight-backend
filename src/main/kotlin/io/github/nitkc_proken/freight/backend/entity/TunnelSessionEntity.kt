@@ -8,7 +8,7 @@ import java.util.UUID
 
 class TunnelSessionEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<TunnelSessionEntity>(TunnelSessionsTable)
-    var tunnel by TunnelSessionsTable.network
-    var user by TunnelSessionsTable.user
+    var network by NetworkEntity referencedOn TunnelSessionsTable.network
+    var user by UserEntity referencedOn TunnelSessionsTable.user
     var clientIp by TunnelSessionsTable.clientIp
 }

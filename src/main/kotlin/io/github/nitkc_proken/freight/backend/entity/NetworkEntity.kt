@@ -10,8 +10,18 @@ import java.util.*
 class NetworkEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<NetworkEntity>(NetworksTable)
 
+    val numericId by NetworksTable.numericId
+
     var name by NetworksTable.name
-    var address by NetworksTable.address
-    var subnetMaskLength by NetworksTable.subnetMaskLength
-    val members by UserEntity via NetworkMembersTable
+    var networkAddr by NetworksTable.networkAddr
+    var containersNetworkAddr by NetworksTable.containersNetworkAddr
+    var clientsNetworkAddr by NetworksTable.clientNetworkAddr
+    var dockerNetworkId by NetworksTable.dockerNetworkId
+    var tunInterfaceName by NetworksTable.tunInterfaceName
+    var vrfInterfaceName by NetworksTable.vrfInterfaceName
+    var bridgeInterfaceName by NetworksTable.bridgeInterfaceName
+
+    var owner by UserEntity referencedOn NetworksTable.owner
+
+    val members by NetworkMemberEntity referrersOn NetworkMembersTable.network
 }

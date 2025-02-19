@@ -1,16 +1,22 @@
 package io.github.nitkc_proken.freight.backend.database.tables
 
-import io.github.nitkc_proken.freight.backend.database.columntype.dockerId
-import io.github.nitkc_proken.freight.backend.database.columntype.ipv4Address
-import io.github.nitkc_proken.freight.backend.database.columntype.networkInterfaceName
-import io.github.nitkc_proken.freight.backend.database.columntype.subnetMaskLength
+import io.github.nitkc_proken.freight.backend.database.columntype.*
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object NetworksTable : UUIDTable() {
     val name = varchar("name", 50)
-    val address = ipv4Address("address")
-    val subnetMaskLength = subnetMaskLength("subnetmask_length")
+    val networkAddr = networkAddressWithMask("network_addr")
+    val containersNetworkAddr = networkAddressWithMask("containers_network_addr")
+    val clientNetworkAddr = networkAddressWithMask("client_network_addr")
     val dockerNetworkId = dockerId("docker_network_id").nullable()
-    val tap_interface_name = networkInterfaceName("tap_interface_name").nullable()
-    val docker_interface_name = networkInterfaceName("docker_interface_name").nullable()
+    val tunInterfaceName = networkInterfaceName("tun_interface_name").nullable()
+    val vrfInterfaceName = networkInterfaceName("vrf_interface_name").nullable()
+    val bridgeInterfaceName = networkInterfaceName("bridge_interface_name").nullable()
+    val owner = reference("owner", UsersTable)
+
+    val numericId = uinteger("numeric_id").autoIncrement().uniqueIndex("nw_numeric_id")
+
+    init {
+        uniqueIndex("full_name", name, owner)
+    }
 }
