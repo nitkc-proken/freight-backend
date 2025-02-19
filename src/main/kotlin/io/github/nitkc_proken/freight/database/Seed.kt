@@ -3,17 +3,18 @@ package io.github.nitkc_proken.freight.database
 import io.github.nitkc_proken.freight.backend.database.getDBConfigFromEnv
 import io.github.nitkc_proken.freight.backend.entity.UserEntity
 import io.github.nitkc_proken.freight.backend.values.Argon2
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
-    val db = getDBConfigFromEnv()
-    db.connect()
+    val dbConfig = getDBConfigFromEnv()
+    val db = dbConfig.connect()
     if (isNeedToMigration()) {
         println("Need to migrate...")
-        migration(db)
+        migration(dbConfig)
     }
     println("Seeding...")
-    seed()
+    seed(db)
 }
 
 val seedUsers = arrayOf(
@@ -27,7 +28,7 @@ val seedUsers = arrayOf(
 
 )
 
-fun seed() = transaction {
+fun seed(db:Database) = transaction(db) {
     seedUsers.forEach { (username, password) ->
         UserEntity.new {
             this.username = username
