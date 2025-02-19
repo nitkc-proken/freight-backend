@@ -15,6 +15,15 @@ spring-security = "6.4.2"
 
 kotest = "5.9.1"
 kotest-koin="1.3.0"
+
+protobuf-plugin = "0.9.4"
+protobuf ="4.29.3"
+grpc-kotlin = "1.4.1"
+grpc="1.69.1"
+
+schema-kenerator = "1.6.3"
+
+docker-java = "3.4.1"
 [libraries]
 ktx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core-jvm", version.ref = "ktor" }
@@ -46,12 +55,36 @@ koin-annotations = { group = "io.insert-koin", name = "koin-annotations", versio
 koin-ksp = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koin-annotation" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 
+
+schema-kenerator-core = { group = "io.github.smiley4", name = "schema-kenerator-core", version.ref = "schema-kenerator" }
+schema-kenerator-reflection = { group = "io.github.smiley4", name = "schema-kenerator-reflection", version.ref = "schema-kenerator" }
+schema-kenerator-serialization = { group = "io.github.smiley4", name = "schema-kenerator-serialization", version.ref = "schema-kenerator" }
+schema-kenerator-swagger = { group = "io.github.smiley4", name = "schema-kenerator-swagger", version.ref = "schema-kenerator" }
+ktor-swagger-ui = { group = "io.github.smiley4", name = "ktor-swagger-ui", version = "4.1.5" }
+
 spring-security-web = { group = "org.springframework.security", name = "spring-security-web", version.ref = "spring-security" }
 bcprov-jdk18on = { group = "org.bouncycastle", name = "bcprov-jdk18on", version = "1.80" }
 
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 
 logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+dotenv = { group = "io.github.cdimascio", name = "dotenv-kotlin", version = "6.5.0" }
+
+# Protobuf and gRPC
+grpc-kotlin-stub = { group = "io.grpc", name = "grpc-kotlin-stub", version.ref = "grpc-kotlin" }
+grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
+grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf", version.ref = "grpc" }
+grpc-netty = { group = "io.grpc", name = "grpc-netty", version.ref="grpc" }
+protobuf-kotlin = { group = "com.google.protobuf", name = "protobuf-kotlin", version.ref = "protobuf" }
+
+protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+grpc-protoc-java = { group = "io.grpc", name = "protoc-gen-grpc-java", version.ref = "grpc" }
+grpc-protoc-kotlin = { group = "io.grpc", name = "protoc-gen-grpc-kotlin", version.ref = "grpc-kotlin" }
+
+# Docker
+docker-java = { group = "com.github.docker-java", name = "docker-java-core", version.ref = "docker-java" }
+docker-java-transport-http = { group = "com.github.docker-java", name = "docker-java-transport-httpclient5", version.ref = "docker-java" }
 
 # Testing libraries
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
@@ -73,3 +106,5 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }

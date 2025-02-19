@@ -1,3 +1,6 @@
+import com.google.protobuf.gradle.id
+import com.google.protobuf.gradle.proto
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
@@ -5,6 +8,8 @@ plugins {
     alias(libs.plugins.detekt)
 
     alias(libs.plugins.ksp)
+
+    alias(libs.plugins.protobuf)
 }
 
 group = "me.naotiki"
@@ -31,6 +36,15 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xcontext-receivers")
     }
+    sourceSets {
+        main {
+            kotlin {
+                srcDir("build/generated/source/proto/main/kotlin")
+                srcDir("build/generated/source/proto/main/java")
+                srcDir("build/generated/source/proto/main/grpcKt")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -56,11 +70,12 @@ dependencies {
     implementation(libs.ktor.client.contentnegotiation)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback)
-    implementation("io.github.smiley4:schema-kenerator-core:1.6.3")
-    implementation("io.github.smiley4:schema-kenerator-reflection:1.6.3")
-    implementation("io.github.smiley4:schema-kenerator-serialization:1.6.3")
-    implementation("io.github.smiley4:schema-kenerator-swagger:1.6.3")
-    implementation("io.github.smiley4:ktor-swagger-ui:4.1.5")
+
+    implementation(libs.schema.kenerator.core)
+    implementation(libs.schema.kenerator.reflection)
+    implementation(libs.schema.kenerator.serialization)
+    implementation(libs.schema.kenerator.swagger)
+    implementation(libs.ktor.swagger.ui)
 
     implementation(libs.koin.ktor)
     implementation(libs.koin.slf4j)
@@ -73,6 +88,18 @@ dependencies {
     implementation(libs.spring.security.web)
     implementation(libs.bcprov.jdk18on)
     //implementation(libs.spring.security.crypto)
+
+    implementation(libs.dotenv)
+
+    // gRPC
+    implementation(libs.grpc.kotlin.stub)
+    implementation(libs.grpc.stub)
+    implementation(libs.grpc.protobuf)
+    implementation(libs.protobuf.kotlin)
+    runtimeOnly(libs.grpc.netty)
+
+    implementation(libs.docker.java)
+    implementation(libs.docker.java.transport.http)
 
     detektPlugins(libs.detekt.formatting)
 
@@ -114,4 +141,34 @@ tasks.register<JavaExec>("seed") {
     classpath = sourceSets.main.get().runtimeClasspath
     standardInput = System.`in`
     mainClass = "io.github.nitkc_proken.freight.database.SeedKt"
+}
+
+
+
+protobuf {
+    protoc {
+        artifact = libs.protoc.get().toString()
+    }
+    plugins {
+        id("grpc") {
+            artifact = libs.grpc.protoc.java.get().toString()
+        }
+        id("grpckt") {
+            artifact = libs.grpc.protoc.kotlin.get().toString() + ":jdk8@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.builtins {
+                id("kotlin")
+            }
+        }
+
+        ofSourceSet("main").forEach {
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+        }
+    }
 }
