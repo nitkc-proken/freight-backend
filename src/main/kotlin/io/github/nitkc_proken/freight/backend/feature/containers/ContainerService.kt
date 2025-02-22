@@ -21,6 +21,6 @@ class ContainerService(
         val newIpAddress = nwModel.containersNetworkAddressWithMask.availableIPAddress().firstOrNull {
             it !in usedIpAddress
         }
-        return containerRepository.createContainer(network.toEntityId(), newIpAddress!!)?.toModel()
+        return containerRepository.createContainer(network.toEntityId(), newIpAddress!!)
     }
 }

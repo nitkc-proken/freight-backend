@@ -4,6 +4,7 @@ import com.github.dockerjava.api.model.HostConfig
 import io.github.nitkc_proken.freight.backend.entity.ContainerEntity
 import io.github.nitkc_proken.freight.backend.entity.NetworkEntity
 import io.github.nitkc_proken.freight.backend.grpc.gatewayClient
+import io.github.nitkc_proken.freight.backend.repository.Container
 import io.github.nitkc_proken.freight.backend.repository.Container.Companion.toModel
 import io.github.nitkc_proken.freight.backend.repository.ContainerRepository
 import io.github.nitkc_proken.freight.backend.repository.toModel
@@ -36,7 +37,7 @@ class ContainerRepositoryImpl : ContainerRepository {
         }
     }
 
-    override suspend fun createContainer(networkId: EntityID<UUID>, ipAddress: IPv4Address): ContainerEntity =
+    override suspend fun createContainer(networkId: EntityID<UUID>, ipAddress: IPv4Address): Container? =
         suspendTransaction {
             val container = dockerClient.createContainerCmd(CONTAINER_IMAGE)
                 .withHostConfig(DefaultHostConfig).withTty(true).withAttachStdin(true).exec()
@@ -46,8 +47,8 @@ class ContainerRepositoryImpl : ContainerRepository {
                 this.network = networkEntity
                 this.ipAddress = ipAddress
             }
-            val containerModel = containerEntity.toModel()
             commit()
+            val containerModel = containerEntity.toModel()
 
             dockerClient.startContainerCmd(container.id).exec()
             val networkModel = networkEntity.toModel()
@@ -63,7 +64,7 @@ class ContainerRepositoryImpl : ContainerRepository {
             containerEntity.apply {
                 this.hostVEthName = containerModel.vEthHostInterfaceNameCandidate
                 this.containerVEthName = containerModel.vEthContainerInterfaceNameCandidate
-            }
+            }.toModel()
             /*updateNICNames(
                 containerEntity,
                 networkModel.vEthInterfaceNameCandidate,

@@ -17,7 +17,7 @@ interface ContainerRepository {
     suspend fun createContainer(
         networkId: EntityID<UUID>,
         ipAddress: IPv4Address,
-    ): ContainerEntity?
+    ): Container?
 
     suspend fun updateNICNames(
         containerEntity: ContainerEntity,
