@@ -1,0 +1,3 @@
+CREATE SEQUENCE IF NOT EXISTS Containers_numeric_id_seq START WITH 1 MINVALUE 1 MAXVALUE 9223372036854775807;
+ALTER TABLE containers ADD numeric_id BIGSERIAL NOT NULL;
+ALTER TABLE containers ADD CONSTRAINT containers_numeric_id_unique UNIQUE (numeric_id);
