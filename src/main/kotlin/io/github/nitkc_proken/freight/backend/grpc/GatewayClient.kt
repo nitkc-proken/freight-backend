@@ -93,6 +93,7 @@ class GatewayClient(
                 this.containerNetworkAddress = network.containersNetworkAddressWithMask.address.value.toInt()
                 this.containerGatewayAddress =
                     network.containersNetworkAddressWithMask.availableIPAddress().last().value.toInt()
+                this.vrfRouteTableId = network.vrfRouteNumber.toInt()
             }
         )
 
