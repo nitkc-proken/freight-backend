@@ -50,7 +50,7 @@ fun Application.configureRouting() {
 
             documentedGet<Networks.ByOwnerAndName, Network>(
                 "指定したネットワークを取得する",
-                builder = {
+                {
                     request {
                         pathParameter<String>("owner", {
                             description = "ネットワークの名前"

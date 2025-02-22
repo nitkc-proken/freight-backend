@@ -295,6 +295,7 @@ paths:
   /api/networks/{owner}/{name}:
     get:
       tags: []
+      description: 指定したネットワークを取得する
       parameters:
       - name: owner
         in: path
@@ -315,6 +316,22 @@ paths:
           type: string
           title: String
       responses:
+        "200":
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    title: Boolean
+                  data:
+                    $ref: "#/components/schemas/Network"
+                required:
+                - data
+                - ok
+                title: Success
         "401":
           description: Unauthorized
           headers: {}
@@ -774,7 +791,7 @@ components:
           type:
           - "null"
           - string
-          title: DockerId#2289138570065654655
+          title: DockerId#1231404733684086085
         tunInterfaceName:
           type:
           - "null"
