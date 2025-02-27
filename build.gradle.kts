@@ -35,6 +35,7 @@ repositories {
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xcontext-receivers")
+        optIn.add("kotlin.uuid.ExperimentalUuidApi")
     }
     sourceSets {
         main {

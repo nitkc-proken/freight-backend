@@ -8,6 +8,7 @@ import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
 import kotlinx.datetime.Instant
 import kotlinx.datetime.isDistantPast
 import org.koin.core.annotation.Single
+import kotlin.uuid.Uuid
 
 @Single
 class TokenRepositoryImpl : TokenRepository {
@@ -20,7 +21,7 @@ class TokenRepositoryImpl : TokenRepository {
     }
 
     override suspend fun getUserFromValidToken(token: String): User? = suspendTransaction {
-        val tokenEntity = TokenEntity.findById(token)
+        val tokenEntity = TokenEntity.findById(Uuid.parse(token))
         if (tokenEntity?.expiresAt?.isDistantPast == true) {
             tokenEntity.delete()
             return@suspendTransaction null
@@ -29,7 +30,7 @@ class TokenRepositoryImpl : TokenRepository {
     }
 
     override suspend fun expireTokenFromUser(token: String): Boolean = suspendTransaction {
-        val tokenEntity = TokenEntity.findById(token)
+        val tokenEntity = TokenEntity.findById(Uuid.parse(token))
         tokenEntity?.delete() ?: return@suspendTransaction false
         true
     }

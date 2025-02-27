@@ -1,13 +1,14 @@
 package io.github.nitkc_proken.freight.backend.entity
 
 import io.github.nitkc_proken.freight.backend.database.tables.ContainersTable
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDEntity
+import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import kotlin.uuid.Uuid
 
-class ContainerEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<ContainerEntity>(ContainersTable)
+
+class ContainerEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
+    companion object : KUUIDEntityClass<ContainerEntity>(ContainersTable)
 
     var containerId by ContainersTable.containerId
     var network by NetworkEntity referencedOn ContainersTable.network

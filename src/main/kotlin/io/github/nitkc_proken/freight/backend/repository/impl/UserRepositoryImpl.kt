@@ -8,10 +8,11 @@ import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
 import io.github.nitkc_proken.freight.backend.values.Argon2
 import org.koin.core.annotation.Single
 import java.util.*
+import kotlin.uuid.Uuid
 
 @Single
 class UserRepositoryImpl : UserRepository {
-    override suspend fun findUserById(id: UUID): User? = suspendTransaction {
+    override suspend fun findUserById(id: Uuid): User? = suspendTransaction {
         UserEntity.findById(id)?.toModel()
     }
 

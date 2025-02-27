@@ -3,6 +3,10 @@ package io.github.nitkc_proken.freight.backend.database.columntype
 import io.github.nitkc_proken.freight.backend.values.*
 import io.github.nitkc_proken.freight.backend.values.Bcrypt.Companion.LENGTH
 import org.jetbrains.exposed.sql.*
+import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.toJavaUuid
+import kotlin.uuid.toKotlinUuid
 
 fun Table.bcrypt(columnName: String): Column<Bcrypt> = varchar(columnName, LENGTH).transform({
     Bcrypt.fromHashedString(it)
@@ -19,8 +23,14 @@ fun Table.subnetMaskLength(name: String) = ubyte(name).transform({ SubnetMaskLen
 fun Table.networkAddressWithMask(name: String) =
     ulong(name).transform({ NetworkAddressWithMask.fromBits(it) }, { it.toBits() })
 
-
-
 fun Table.dockerId(name: String) = varchar(name, 64).transform({ DockerId(it) }, { it.value })
 
 fun Table.networkInterfaceName(name: String) = varchar(name, 15).transform({ NetworkInterfaceName(it) }, { it.value })
+
+@OptIn(ExperimentalUuidApi::class)
+fun Table.kuuid(
+    name: String,
+    preprocess: Column<UUID>.() -> Column<UUID> = {
+        this
+    }
+) = uuid(name).preprocess().transform({ it.toKotlinUuid() }, { it.toJavaUuid() })

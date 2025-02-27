@@ -3,9 +3,7 @@ package io.github.nitkc_proken.freight.backend.grpc
 
 import backend.*
 import io.github.nitkc_proken.freight.backend.database.tables.NetworksTable
-import io.github.nitkc_proken.freight.backend.database.tables.TunnelSessionsTable.clientIp
 import io.github.nitkc_proken.freight.backend.database.tables.UsersTable
-import io.github.nitkc_proken.freight.backend.feature.networks.NetworkService
 import io.github.nitkc_proken.freight.backend.repository.NetworkRepository
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
 import io.github.nitkc_proken.freight.backend.repository.TunnelSessionRepository
@@ -14,8 +12,8 @@ import io.grpc.ServerBuilder
 import org.jetbrains.exposed.dao.id.EntityID
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.*
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class BackendServer(
     private val port: Int = 4000,
@@ -61,18 +59,18 @@ class BackendServer(
         ): BackendOuterClass.StartTunnelingSessionResponse {
             //TODO Token Check
             val network = networkRepository.getJoinedNetworkById(
-                EntityID(UUID.fromString(request.userId), UsersTable),
-                EntityID(UUID.fromString(request.networkId), NetworksTable)
+                EntityID(Uuid.parse(request.userId), UsersTable),
+                EntityID(Uuid.parse(request.networkId), NetworksTable)
             )
             if (network == null) {
                 throw Exception("GRPC:Network not found")
             }
-            val used = networkRepository.listUsedIPAddress(EntityID(UUID.fromString(request.networkId), NetworksTable))
+            val used = networkRepository.listUsedIPAddress(EntityID(Uuid.parse(request.networkId), NetworksTable))
             val ip = network.clientsNetworkAddressWithMask.availableIPAddress().firstOrNull {
                 it !in used
             }
             val session = tunnelSessionRepository.createTunnelSession(
-                EntityID(UUID.fromString(request.userId), UsersTable),
+                EntityID(Uuid.parse(request.userId), UsersTable),
                 network.toEntityId(),
                 ip!!
             )

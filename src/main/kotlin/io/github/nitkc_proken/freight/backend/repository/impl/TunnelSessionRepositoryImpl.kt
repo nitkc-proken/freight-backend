@@ -11,12 +11,13 @@ import io.github.nitkc_proken.freight.backend.values.IPv4Address
 import org.jetbrains.exposed.dao.id.EntityID
 import org.koin.core.annotation.Single
 import java.util.*
+import kotlin.uuid.Uuid
 
 @Single
 class TunnelSessionRepositoryImpl : TunnelSessionRepository {
     override suspend fun createTunnelSession(
-        user: EntityID<UUID>,
-        network: EntityID<UUID>,
+        user: EntityID<Uuid>,
+        network: EntityID<Uuid>,
         ipAddress: IPv4Address
     ): TunnelSession = suspendTransaction {
         TunnelSessionEntity.new {

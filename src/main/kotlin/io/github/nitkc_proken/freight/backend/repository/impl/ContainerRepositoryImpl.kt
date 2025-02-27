@@ -16,6 +16,7 @@ import io.github.nitkc_proken.freight.backend.values.NetworkInterfaceName
 import org.jetbrains.exposed.dao.id.EntityID
 import org.koin.core.annotation.Single
 import java.util.*
+import kotlin.uuid.Uuid
 
 @Single
 class ContainerRepositoryImpl : ContainerRepository {
@@ -37,7 +38,7 @@ class ContainerRepositoryImpl : ContainerRepository {
         }
     }
 
-    override suspend fun createContainer(networkId: EntityID<UUID>, ipAddress: IPv4Address): Container? =
+    override suspend fun createContainer(networkId: EntityID<Uuid>, ipAddress: IPv4Address): Container? =
         suspendTransaction {
             val container = dockerClient.createContainerCmd(CONTAINER_IMAGE)
                 .withHostConfig(DefaultHostConfig).withTty(true).withAttachStdin(true).exec()

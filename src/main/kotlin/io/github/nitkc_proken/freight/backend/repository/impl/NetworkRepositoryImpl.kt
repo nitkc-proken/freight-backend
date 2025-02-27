@@ -18,6 +18,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.union
 import org.koin.core.annotation.Single
 import java.util.*
+import kotlin.uuid.Uuid
 
 @Single
 class NetworkRepositoryImpl : NetworkRepository {
@@ -26,7 +27,7 @@ class NetworkRepositoryImpl : NetworkRepository {
         networkAddressWithMask: NetworkAddressWithMask,
         containerNetworkAddressWithMask: NetworkAddressWithMask,
         clientNetworkAddressWithMask: NetworkAddressWithMask,
-        owner: EntityID<UUID>
+        owner: EntityID<Uuid>
     ): Network = suspendTransaction {
         val entity = NetworkEntity.new {
             this.name = name
@@ -46,7 +47,7 @@ class NetworkRepositoryImpl : NetworkRepository {
     }
 
     override suspend fun updateNICNames(
-        network: EntityID<UUID>,
+        network: EntityID<Uuid>,
         tunInterfaceName: NetworkInterfaceName,
         vrfInterfaceName: NetworkInterfaceName,
         bridgeInterfaceName: NetworkInterfaceName
@@ -58,7 +59,7 @@ class NetworkRepositoryImpl : NetworkRepository {
         }.toModel()
     }
 
-    override suspend fun clearNICNames(network: EntityID<UUID>): Network = suspendTransaction {
+    override suspend fun clearNICNames(network: EntityID<Uuid>): Network = suspendTransaction {
         NetworkEntity[network].apply {
             this.tunInterfaceName = null
             this.vrfInterfaceName = null
@@ -70,7 +71,7 @@ class NetworkRepositoryImpl : NetworkRepository {
         NetworkEntity.all().map { it.toModel() }
     }
 
-    override suspend fun listOwnedNetworks(user: EntityID<UUID>): List<Network> = suspendTransaction {
+    override suspend fun listOwnedNetworks(user: EntityID<Uuid>): List<Network> = suspendTransaction {
         NetworkEntity
             .find { NetworksTable.owner eq user }
             .map { it.toModel() }
@@ -83,8 +84,8 @@ class NetworkRepositoryImpl : NetworkRepository {
     }
 
     override suspend fun getJoinedNetworkByFullName(
-        user: EntityID<UUID>,
-        owner: EntityID<UUID>,
+        user: EntityID<Uuid>,
+        owner: EntityID<Uuid>,
         name: String
     ): Network? =
         suspendTransaction {
@@ -99,7 +100,7 @@ class NetworkRepositoryImpl : NetworkRepository {
                 ?.let { NetworkEntity.wrapRow(it).toModel() }
         }
 
-    override suspend fun getJoinedNetworkById(user: EntityID<UUID>, network: EntityID<UUID>): Network? =
+    override suspend fun getJoinedNetworkById(user: EntityID<Uuid>, network: EntityID<Uuid>): Network? =
         suspendTransaction {
             NetworksTable.innerJoin(NetworkMembersTable)
                 .select(NetworksTable.columns)
@@ -111,7 +112,7 @@ class NetworkRepositoryImpl : NetworkRepository {
                 ?.let { NetworkEntity.wrapRow(it).toModel() }
         }
 
-    override suspend fun listUsedIPAddress(network: EntityID<UUID>): List<IPv4Address> = suspendTransaction {
+    override suspend fun listUsedIPAddress(network: EntityID<Uuid>): List<IPv4Address> = suspendTransaction {
         val containerQuery = ContainersTable.select(ContainersTable.ipAddress.alias("ip"))
             .where { ContainersTable.network eq network }
         val tunnelQuery = TunnelSessionsTable.select(TunnelSessionsTable.clientIp.alias("ip"))

@@ -7,15 +7,11 @@ import io.github.nitkc_proken.freight.backend.values.IPv4Address
 import io.github.nitkc_proken.freight.backend.values.NetworkInterfaceName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlin.uuid.toJavaUuid
-import kotlin.uuid.toKotlinUuid
 
 interface ContainerRepository {
     suspend fun createContainer(
-        networkId: EntityID<UUID>,
+        networkId: EntityID<Uuid>,
         ipAddress: IPv4Address,
     ): Container?
 
@@ -27,7 +23,6 @@ interface ContainerRepository {
 }
 
 
-@OptIn(ExperimentalUuidApi::class)
 @Serializable
 data class Container(
     val id: Uuid,
@@ -37,11 +32,10 @@ data class Container(
     val hostVEthName: NetworkInterfaceName?,
     val containerVEthName: NetworkInterfaceName?,
     val numericId: UInt
-) : Model<UUID> {
+) : Model<Uuid> {
     companion object : EntityToModel<ContainerEntity, Container> {
-        @OptIn(ExperimentalUuidApi::class)
         override fun ContainerEntity.toModel(): Container = Container(
-            id.value.toKotlinUuid(),
+            id.value,
             containerId,
             network.toModel(),
             ipAddress,
@@ -54,6 +48,6 @@ data class Container(
 
     val vEthHostInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-veth")
     val vEthContainerInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-veth-c")
-    override fun toEntityId(): EntityID<UUID> =
-        EntityID(id.toJavaUuid(), ContainersTable)
+    override fun toEntityId(): EntityID<Uuid> =
+        EntityID(id, ContainersTable)
 }

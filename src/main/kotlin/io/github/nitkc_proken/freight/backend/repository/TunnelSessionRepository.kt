@@ -1,22 +1,18 @@
 package io.github.nitkc_proken.freight.backend.repository
 
-import io.github.nitkc_proken.freight.backend.database.tables.ContainersTable.containerId
 import io.github.nitkc_proken.freight.backend.database.tables.TunnelSessionsTable
 import io.github.nitkc_proken.freight.backend.entity.TunnelSessionEntity
 import io.github.nitkc_proken.freight.backend.repository.User.Companion.toModel
 import io.github.nitkc_proken.freight.backend.values.IPv4Address
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlin.uuid.toJavaUuid
-import kotlin.uuid.toKotlinUuid
 
 interface TunnelSessionRepository {
     suspend fun createTunnelSession(
-        user: EntityID<UUID>,
-        network: EntityID<UUID>,
+        user: EntityID<Uuid>,
+        network: EntityID<Uuid>,
         ipAddress: IPv4Address,
     ): TunnelSession
 }
@@ -28,11 +24,11 @@ data class TunnelSession(
     val user: User,
     val network: Network,
     val ipAddress: IPv4Address,
-) : Model<UUID> {
+) : Model<Uuid> {
     companion object : EntityToModel<TunnelSessionEntity, TunnelSession> {
         override fun TunnelSessionEntity.toModel(): TunnelSession {
             return TunnelSession(
-                id.value.toKotlinUuid(),
+                id.value,
                 user.toModel(),
                 network.toModel(),
                 clientIp
@@ -40,8 +36,8 @@ data class TunnelSession(
         }
     }
 
-    override fun toEntityId(): EntityID<UUID> {
-        return EntityID(id.toJavaUuid(), TunnelSessionsTable)
+    override fun toEntityId(): EntityID<Uuid> {
+        return EntityID(id, TunnelSessionsTable)
     }
 
 }

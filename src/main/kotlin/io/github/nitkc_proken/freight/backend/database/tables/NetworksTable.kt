@@ -1,9 +1,10 @@
 package io.github.nitkc_proken.freight.backend.database.tables
 
 import io.github.nitkc_proken.freight.backend.database.columntype.*
+import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 
-object NetworksTable : UUIDTable() {
+object NetworksTable : KUUIDTable() {
     val name = varchar("name", 50)
     val networkAddr = networkAddressWithMask("network_addr")
     val containersNetworkAddr = networkAddressWithMask("containers_network_addr")

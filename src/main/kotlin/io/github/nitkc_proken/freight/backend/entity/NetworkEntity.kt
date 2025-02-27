@@ -2,13 +2,13 @@ package io.github.nitkc_proken.freight.backend.entity
 
 import io.github.nitkc_proken.freight.backend.database.tables.NetworkMembersTable
 import io.github.nitkc_proken.freight.backend.database.tables.NetworksTable
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
+import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDEntity
+import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import kotlin.uuid.Uuid
 
-class NetworkEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<NetworkEntity>(NetworksTable)
+class NetworkEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
+    companion object : KUUIDEntityClass<NetworkEntity>(NetworksTable)
 
     val numericId by NetworksTable.numericId
 

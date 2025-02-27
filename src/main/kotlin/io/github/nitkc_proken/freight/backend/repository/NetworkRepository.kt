@@ -8,11 +8,7 @@ import io.github.nitkc_proken.freight.backend.repository.User.Companion.toModel
 import io.github.nitkc_proken.freight.backend.values.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlin.uuid.toJavaUuid
-import kotlin.uuid.toKotlinUuid
 
 interface NetworkRepository {
     suspend fun createNetwork(
@@ -20,32 +16,31 @@ interface NetworkRepository {
         networkAddressWithMask: NetworkAddressWithMask,
         containerNetworkAddressWithMask: NetworkAddressWithMask,
         clientNetworkAddressWithMask: NetworkAddressWithMask,
-        owner: EntityID<UUID>,
+        owner: EntityID<Uuid>,
     ): Network
 
     suspend fun updateNICNames(
-        network: EntityID<UUID>,
+        network: EntityID<Uuid>,
         tunInterfaceName: NetworkInterfaceName,
         vrfInterfaceName: NetworkInterfaceName,
         bridgeInterfaceName: NetworkInterfaceName,
     ): Network
 
-    suspend fun clearNICNames(network: EntityID<UUID>): Network
+    suspend fun clearNICNames(network: EntityID<Uuid>): Network
 
     suspend fun listAllNetworks(): List<Network>
 
-    suspend fun listOwnedNetworks(user: EntityID<UUID>): List<Network>
+    suspend fun listOwnedNetworks(user: EntityID<Uuid>): List<Network>
 
     suspend fun getOwnedNetworkByName(user: UserEntity, name: String): Network?
 
-    suspend fun listUsedIPAddress(network: EntityID<UUID>): List<IPv4Address>
-    suspend fun getJoinedNetworkByFullName(user: EntityID<UUID>, owner: EntityID<UUID>, name: String): Network?
-    suspend fun getJoinedNetworkById(user: EntityID<UUID>, network: EntityID<UUID>): Network?
+    suspend fun listUsedIPAddress(network: EntityID<Uuid>): List<IPv4Address>
+    suspend fun getJoinedNetworkByFullName(user: EntityID<Uuid>, owner: EntityID<Uuid>, name: String): Network?
+    suspend fun getJoinedNetworkById(user: EntityID<Uuid>, network: EntityID<Uuid>): Network?
 }
 
-@OptIn(ExperimentalUuidApi::class)
 @Serializable
-data class Network @OptIn(ExperimentalUuidApi::class) constructor(
+data class Network constructor(
     val id: Uuid,
     val numericId: UInt,
     val name: String,
@@ -59,12 +54,11 @@ data class Network @OptIn(ExperimentalUuidApi::class) constructor(
     val tunInterfaceName: NetworkInterfaceName?,
     val vrfInterfaceName: NetworkInterfaceName?,
     val bridgeInterfaceName: NetworkInterfaceName?,
-) : Model<UUID> {
+) : Model<Uuid> {
 
     companion object : EntityToModel<NetworkEntity, Network> {
-        @OptIn(ExperimentalUuidApi::class)
         override fun NetworkEntity.toModel(): Network = Network(
-            id.value.toKotlinUuid(),
+            id.value,
             numericId,
             name,
             networkAddr,
@@ -87,7 +81,7 @@ data class Network @OptIn(ExperimentalUuidApi::class) constructor(
 
 
     val vrfRouteNumber get() = numericId + 1000u
-    override fun toEntityId(): EntityID<UUID> = EntityID(id.toJavaUuid(), NetworksTable)
+    override fun toEntityId(): EntityID<Uuid> = EntityID(id, NetworksTable)
 }
 
 @Serializable
@@ -96,9 +90,8 @@ data class NetworkMember(
     val permission: Permissions
 )
 
-@OptIn(ExperimentalUuidApi::class)
 fun NetworkEntity.toModel(): Network = Network(
-    id.value.toKotlinUuid(),
+    id.value,
     numericId,
     name,
     networkAddr,
