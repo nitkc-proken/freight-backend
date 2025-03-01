@@ -37,15 +37,18 @@ class AuthRoutingKtTest {
                 val user = User(
                     Uuid.random(),
                     "test",
-                    Argon2.hash("password")
                 )
 
-                override suspend fun findUserById(id: UUID): User {
-                    return user
+                override suspend fun findUserById(id: Uuid): User? {
+                    TODO("Not yet implemented")
                 }
 
                 override suspend fun findUserByUsername(username: String): User {
                     return user
+                }
+
+                override suspend fun getUserWithPasswordHash(username: String): Pair<User, Argon2>? {
+                    return user to Argon2.hash("password")
                 }
 
                 override suspend fun createUser(username: String, password: Argon2): User {
