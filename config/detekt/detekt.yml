@@ -135,6 +135,8 @@ style:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
     active: true
+  UnusedImports:
+    active: true
   UnusedParameter:
     active: false
   UnusedPrivateClass:
