@@ -12,5 +12,4 @@ class NetworkMemberEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     var network by NetworkEntity referencedOn NetworkMembersTable.network
     var member by UserEntity referencedOn NetworkMembersTable.user
     var permission by NetworkMembersTable.permission
-
 }

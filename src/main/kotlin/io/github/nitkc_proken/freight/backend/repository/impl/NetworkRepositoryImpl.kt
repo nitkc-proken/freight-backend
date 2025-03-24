@@ -93,8 +93,8 @@ class NetworkRepositoryImpl : NetworkRepository {
                 .select(NetworksTable.columns)
                 .where {
                     (NetworksTable.owner eq owner) and
-                            (NetworksTable.name eq name) and
-                            (NetworkMembersTable.user eq user)
+                        (NetworksTable.name eq name) and
+                        (NetworkMembersTable.user eq user)
                 }
                 .singleOrNull()
                 ?.let { NetworkEntity.wrapRow(it).toModel() }
@@ -106,7 +106,7 @@ class NetworkRepositoryImpl : NetworkRepository {
                 .select(NetworksTable.columns)
                 .where {
                     (NetworksTable.id eq network) and
-                            (NetworkMembersTable.user eq user)
+                        (NetworkMembersTable.user eq user)
                 }
                 .singleOrNull()
                 ?.let { NetworkEntity.wrapRow(it).toModel() }

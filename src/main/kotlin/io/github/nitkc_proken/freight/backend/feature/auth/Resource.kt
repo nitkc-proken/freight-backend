@@ -13,6 +13,7 @@ class Auth {
     data class Register(
         val auth: Auth = Auth(),
     )
+
     @Resource("/logout")
     data class Logout(
         val auth: Auth = Auth(),

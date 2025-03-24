@@ -28,13 +28,14 @@ class Networks {
         val owner: String,
         val name: String,
         val networks: Networks = Networks()
-    ){
+    ) {
         @Resource("/init")
         class Init(
             val owner: String,
             val name: String,
             val byOwnerAndName: ByOwnerAndName = ByOwnerAndName(owner, name)
         )
+
         @Resource("/clean")
         class Clean(
             val owner: String,
@@ -42,6 +43,4 @@ class Networks {
             val byOwnerAndName: ByOwnerAndName = ByOwnerAndName(owner, name)
         )
     }
-
-
 }

@@ -36,7 +36,6 @@ data class MigrationMetadata(
 fun List<String>.joinHash(): Int {
     val str = this.joinToString()
     return str.hashCode()
-
 }
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -59,7 +58,6 @@ fun main(vararg args: String) = transaction(getDBConfigFromEnv().connect()) {
         print("what is new migration name? :")
         migrationName = readln()
     } while (migrationName.isNullOrBlank())
-
 
     val nextVersion = metadata?.latest?.version?.plus(1) ?: 1
 

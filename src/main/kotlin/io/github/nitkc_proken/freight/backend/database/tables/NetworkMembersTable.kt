@@ -4,7 +4,6 @@ import com.google.protobuf.enum
 import io.github.nitkc_proken.freight.backend.database.columntype.enum
 import io.github.nitkc_proken.freight.backend.values.Permissions
 import org.jetbrains.exposed.dao.id.CompositeIdTable
-import org.jetbrains.exposed.sql.Table
 
 object NetworkMembersTable : CompositeIdTable() {
     val user = reference("user", UsersTable)

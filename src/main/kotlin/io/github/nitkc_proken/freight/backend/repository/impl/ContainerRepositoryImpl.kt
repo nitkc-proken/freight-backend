@@ -28,7 +28,6 @@ class ContainerRepositoryImpl : ContainerRepository {
             this.ipAddress = t.ipAddress
             this.hostVEthName = t.hostVEthName
             this.containerVEthName = t.containerVEthName
-
         }.toModel()
     }
 

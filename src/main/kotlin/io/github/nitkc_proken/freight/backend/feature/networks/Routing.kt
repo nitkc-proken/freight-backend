@@ -2,7 +2,6 @@ package io.github.nitkc_proken.freight.backend.feature.networks
 
 import io.github.nitkc_proken.freight.backend.feature.auth.UserWithTokenResponse
 import io.github.nitkc_proken.freight.backend.feature.networks.model.CreateNetworkRequest
-import io.github.nitkc_proken.freight.backend.grpc.gatewayClient
 import io.github.nitkc_proken.freight.backend.plugins.UserWithToken
 import io.github.nitkc_proken.freight.backend.repository.Network
 import io.github.nitkc_proken.freight.backend.utils.*
@@ -19,10 +18,11 @@ fun Application.configureRouting() {
     routing {
         authenticate {
             documentedPost<Networks.Create, CreateNetworkRequest, UserWithTokenResponse>(
-                "ネットワークを作成する", {
+                "ネットワークを作成する",
+                {
                     errorResponses(HttpStatusCode.Unauthorized, HttpStatusCode.BadRequest)
-                })
-            { _, createNetworkRequestBody ->
+                }
+            ) { _, createNetworkRequestBody ->
                 val principal = call.principal<UserWithToken>() ?: return@documentedPost call.respond(
                     status = HttpStatusCode.Unauthorized,
                     responseError("User not found")
@@ -39,7 +39,8 @@ fun Application.configureRouting() {
                 "自身のネットワークを取得する",
                 {
                     errorResponses(HttpStatusCode.Unauthorized)
-                }) {
+                }
+            ) {
                 val principal = call.principal<UserWithToken>() ?: return@documentedGet call.respond(
                     status = HttpStatusCode.Unauthorized,
                     responseError("User not found")
@@ -60,7 +61,8 @@ fun Application.configureRouting() {
                         })
                     }
                     errorResponses(HttpStatusCode.Unauthorized, HttpStatusCode.NotFound)
-                }) {
+                }
+            ) {
                 val principal = call.principal<UserWithToken>() ?: return@documentedGet call.respond(
                     status = HttpStatusCode.Unauthorized,
                     responseError("User not found")
@@ -85,7 +87,8 @@ fun Application.configureRouting() {
                         pathParameter<String>("name")
                     }
                     errorResponses(HttpStatusCode.Unauthorized, HttpStatusCode.NotFound)
-                }) {
+                }
+            ) {
                 val principal = call.principal<UserWithToken>() ?: return@documentedPost call.respond(
                     status = HttpStatusCode.Unauthorized,
                     responseError("User not found")
@@ -111,7 +114,8 @@ fun Application.configureRouting() {
                         pathParameter<String>("name")
                     }
                     errorResponses(HttpStatusCode.Unauthorized, HttpStatusCode.NotFound)
-                }) {
+                }
+            ) {
                 val principal = call.principal<UserWithToken>() ?: return@documentedPost call.respond(
                     status = HttpStatusCode.Unauthorized,
                     responseError("User not found")

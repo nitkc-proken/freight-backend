@@ -15,10 +15,10 @@ value class NetworkInterfaceName(val value: String) : Validatable {
 
     companion object {
         val NIC_NAME_CHARACTERS = (('a'..'z') + ('A'..'Z') + ('0'..'9')).toCharArray() +
-                "!\"#\$%&'()*+,-.:;<=>?@[]^_`{|}~".toCharArray()
+            "!\"#\$%&'()*+,-.:;<=>?@[]^_`{|}~".toCharArray()
 
-        @Deprecated("Use StringEncoder")
         // UInt id部は最大6文字
+        @Deprecated("Use StringEncoder")
         fun generateNICName(id: UInt, prefix: String = "f", suffix: String = ""): NetworkInterfaceName {
             val base = NIC_NAME_CHARACTERS.size.toUInt()
 

@@ -3,7 +3,6 @@ package io.github.nitkc_proken.freight.backend.database.tabletype
 import io.github.nitkc_proken.freight.backend.database.columntype.kuuid
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
-import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import java.util.*
@@ -18,7 +17,6 @@ abstract class KUUIDTable(name: String = "", columnName: String = "id") : IdTabl
 
 @OptIn(ExperimentalUuidApi::class)
 abstract class KUUIDEntity(id: EntityID<Uuid>) : Entity<Uuid>(id)
-
 
 @OptIn(ExperimentalUuidApi::class)
 abstract class KUUIDEntityClass<out E : KUUIDEntity>(

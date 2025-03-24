@@ -6,7 +6,6 @@ import io.github.nitkc_proken.freight.backend.database.tabletype.KUUIDEntityClas
 import org.jetbrains.exposed.dao.id.EntityID
 import kotlin.uuid.Uuid
 
-
 class ContainerEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
     companion object : KUUIDEntityClass<ContainerEntity>(ContainersTable)
 

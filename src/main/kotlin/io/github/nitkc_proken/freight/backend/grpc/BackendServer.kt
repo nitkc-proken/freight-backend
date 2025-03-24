@@ -1,6 +1,5 @@
 package io.github.nitkc_proken.freight.backend.grpc
 
-
 import backend.*
 import io.github.nitkc_proken.freight.backend.database.tables.NetworksTable
 import io.github.nitkc_proken.freight.backend.database.tables.UsersTable
@@ -57,7 +56,7 @@ class BackendServer(
         override suspend fun startTunnelSession(
             request: BackendOuterClass.StartTunnelingSessionRequest
         ): BackendOuterClass.StartTunnelingSessionResponse {
-            //TODO Token Check
+            // TODO Token Check
             val network = networkRepository.getJoinedNetworkById(
                 EntityID(Uuid.parse(request.userId), UsersTable),
                 EntityID(Uuid.parse(request.networkId), NetworksTable)
@@ -84,7 +83,6 @@ class BackendServer(
             request: BackendOuterClass.CloseTunnelSessionRequest
         ): BackendOuterClass.CloseTunnelSessionResponse {
             return closeTunnelSessionResponse {
-
             }
         }
     }

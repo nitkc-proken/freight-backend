@@ -39,5 +39,4 @@ data class TunnelSession(
     override fun toEntityId(): EntityID<Uuid> {
         return EntityID(id, TunnelSessionsTable)
     }
-
 }

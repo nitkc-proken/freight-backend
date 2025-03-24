@@ -3,7 +3,6 @@ package io.github.nitkc_proken.freight.backend.repository
 import io.github.nitkc_proken.freight.backend.entity.TokenEntity
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import kotlin.uuid.Uuid
 
 interface TokenRepository {
     suspend fun createToken(user: User, expiresAt: Instant): Token

@@ -8,13 +8,13 @@ import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.FluentConfiguration
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun main(vararg args:String) {
+fun main(vararg args: String) {
     val db = getDBConfigFromEnv()
     db.connect()
     migration(db)
 }
 
-fun isNeedToMigration() = transaction() {
+fun isNeedToMigration() = transaction {
     MigrationUtils.statementsRequiredForDatabaseMigration(*tables, withLogs = false).isNotEmpty()
 }
 
@@ -23,11 +23,10 @@ fun migration(dbConfig: DBConfig, baseline: Boolean = false) {
         .locations("filesystem:$MIGRATIONS_DIRECTORY")
         .baselineOnMigrate(baseline) // 既存のデータベースを初めて移行するときに使用します
         .load()
-    transaction() {
+    transaction {
         flyway.migrate()
     }
 }
-
 
 fun DBConfig.toFlywayConfig(): FluentConfiguration = Flyway.configure()
     .dataSource(url, user, password)

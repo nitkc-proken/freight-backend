@@ -10,7 +10,6 @@ import io.ktor.utils.io.*
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-
 @KtorDsl
 @JvmName(name = "postTyped")
 inline fun <reified Resource : Any, reified T : Validatable, reified Success> Route.documentedPost(

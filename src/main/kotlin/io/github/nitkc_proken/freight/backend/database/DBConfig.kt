@@ -28,9 +28,7 @@ data class DBConfig(
 fun getDBConfigFromEnv(): DBConfig {
     return DBConfig(
         url = dotenv["JDBC_URL"],
-        user = dotenv["DB_USER"],// System.getenv("DB_USER") ?: "freight",
-        password = dotenv["DB_PASSWORD"] //System.getenv("DB_PASSWORD") ?: "freight",
+        user = dotenv["DB_USER"], // System.getenv("DB_USER") ?: "freight",
+        password = dotenv["DB_PASSWORD"] // System.getenv("DB_PASSWORD") ?: "freight",
     )
 }
-
-

@@ -3,10 +3,6 @@ package io.github.nitkc_proken.freight.backend.feature.networks.model
 import io.github.nitkc_proken.freight.backend.utils.Validatable
 import io.github.nitkc_proken.freight.backend.utils.ValidationContext
 import io.github.nitkc_proken.freight.backend.values.NetworkAddressWithMask
-import io.github.smiley4.schemakenerator.core.annotations.Example
-import io.github.smiley4.schemakenerator.core.annotations.Format
-import io.github.smiley4.schemakenerator.core.annotations.Type
-import io.github.smiley4.schemakenerator.swagger.data.SwaggerTypeHint
 import kotlinx.serialization.Serializable
 
 @Serializable

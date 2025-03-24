@@ -1,10 +1,6 @@
 package io.github.nitkc_proken.freight.backend.grpc
 
-
 import gateway.*
-import io.github.nitkc_proken.freight.backend.database.tables.ContainersTable.containerId
-import io.github.nitkc_proken.freight.backend.database.tables.ContainersTable.containerVEthName
-import io.github.nitkc_proken.freight.backend.database.tables.ContainersTable.hostVEthName
 import io.github.nitkc_proken.freight.backend.repository.Network
 import io.github.nitkc_proken.freight.backend.values.IPv4Address
 import io.github.nitkc_proken.freight.backend.values.NetworkInterfaceName
@@ -65,7 +61,6 @@ class GatewayClient(
                 bridgeInterfaceName = network.bridgeInterfaceName.value
                 tunInterfaceName = network.tunInterfaceName.value
                 vrfRouteTableId = network.vrfRouteNumber.toInt()
-
             }
         )
     }
@@ -96,11 +91,9 @@ class GatewayClient(
                 this.vrfRouteTableId = network.vrfRouteNumber.toInt()
             }
         )
-
     }
 
     override fun close() {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)
     }
-
 }

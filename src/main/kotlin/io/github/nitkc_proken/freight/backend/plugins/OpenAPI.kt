@@ -9,7 +9,6 @@ import io.github.smiley4.ktorswaggerui.data.*
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.github.smiley4.schemakenerator.core.addDiscriminatorProperty
-import io.github.smiley4.schemakenerator.core.annotations.Format
 import io.github.smiley4.schemakenerator.core.connectSubTypes
 import io.github.smiley4.schemakenerator.core.data.AnnotationData
 import io.github.smiley4.schemakenerator.core.data.PrimitiveTypeData
@@ -26,7 +25,6 @@ import io.swagger.v3.core.util.Yaml31
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import java.io.File
-import kotlin.reflect.typeOf
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -35,7 +33,6 @@ fun Application.configureOpenAPI() {
         schemas {
             generator = { type ->
                 type
-
                     .processKotlinxSerialization {
                         customProcessor<NetworkAddressWithMask> {
                             createDefaultPrimitiveTypeData<NetworkAddressWithMask>("string", "ipv4-cidr", "10.0.0.0/8")
@@ -73,7 +70,6 @@ fun Application.configureOpenAPI() {
                     .handleSchemaAnnotations()
                     .withTitle(TitleType.SIMPLE)
                     .compileReferencing(RefType.OPENAPI_SIMPLE)
-
             }
         }
         info {

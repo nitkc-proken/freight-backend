@@ -44,7 +44,6 @@ data class Container(
             containerVEthName,
             shortId
         )
-
     }
 
     val vEthHostInterfaceNameCandidate get() = NetworkInterfaceName("fvh-$shortId")

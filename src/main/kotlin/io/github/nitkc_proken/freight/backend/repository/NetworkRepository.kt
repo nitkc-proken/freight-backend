@@ -73,12 +73,9 @@ data class Network constructor(
         )
     }
 
-
     val tunInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-tun")
     val vrfInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-vrf")
     val bridgeInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-br")
-
-
 
     val vrfRouteNumber get() = numericId + 1000u
     override fun toEntityId(): EntityID<Uuid> = EntityID(id, NetworksTable)
@@ -106,5 +103,6 @@ fun NetworkEntity.toModel(): Network = Network(
 )
 
 fun NetworkMemberEntity.toModel(): NetworkMember = NetworkMember(
-    member.toModel(), permission
+    member.toModel(),
+    permission
 )

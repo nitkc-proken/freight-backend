@@ -4,7 +4,6 @@ import io.github.nitkc_proken.freight.backend.utils.Validatable
 import io.github.nitkc_proken.freight.backend.utils.ValidationContext
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 @JvmInline
 value class SubnetMaskLength(val value: UByte) : Validatable {

@@ -52,7 +52,8 @@ value class IPv4Address(
 }
 
 class IPv4AddressRange(
-    val start: IPv4Address, val endInclusive: IPv4Address
+    val start: IPv4Address,
+    val endInclusive: IPv4Address
 ) : Iterable<IPv4Address> {
     override fun iterator(): Iterator<IPv4Address> {
         return object : Iterator<IPv4Address> {

@@ -28,7 +28,7 @@ val seedUsers = arrayOf(
 
 )
 
-fun seed(db:Database) = transaction(db) {
+fun seed(db: Database) = transaction(db) {
     seedUsers.forEach { (username, password) ->
         UserEntity.new {
             this.username = username
