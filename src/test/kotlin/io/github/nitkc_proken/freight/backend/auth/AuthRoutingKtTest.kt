@@ -13,8 +13,6 @@ import io.github.nitkc_proken.freight.backend.values.Argon2
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.contentType
-import io.ktor.client.utils.EmptyContent.status
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.testing.*

@@ -27,12 +27,12 @@ processors:
 console-reports:
   active: true
   exclude:
-     - 'ProjectStatisticsReport'
-     - 'ComplexityReport'
-     - 'NotificationReport'
-     - 'FindingsReport'
-     - 'FileBasedFindingsReport'
-   #  - 'LiteFindingsReport'
+    - 'ProjectStatisticsReport'
+    - 'ComplexityReport'
+    - 'NotificationReport'
+    - 'FindingsReport'
+    - 'FileBasedFindingsReport'
+    #  - 'LiteFindingsReport'
 
 output-reports:
   active: true
@@ -145,6 +145,8 @@ style:
     active: false
   WildcardImport:
     active: false
+  ForbiddenComment:
+    comments: [ 'STOPSHIP:' ]
 
 formatting:
   active: true
@@ -154,3 +156,6 @@ formatting:
     active: false
   PackageName:
     active: false
+  Filename:
+    excludes:
+      - "**/feature/*/Resource.kt"

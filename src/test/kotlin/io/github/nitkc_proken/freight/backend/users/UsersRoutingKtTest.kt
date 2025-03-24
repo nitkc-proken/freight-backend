@@ -1,4 +1,4 @@
-package io.github.nitkc_proken.freight.backend.auth
+package io.github.nitkc_proken.freight.backend.users
 
 import io.github.nitkc_proken.freight.backend.feature.users.usersModule
 import io.github.nitkc_proken.freight.backend.plugins.KoinModule
