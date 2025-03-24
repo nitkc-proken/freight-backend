@@ -5,7 +5,7 @@ ktor = "3.0.2"
 exposed = "0.58.0"
 postgresql = "42.7.2"
 logback = "1.5.15"
-detekt = "1.23.7"
+detekt = "1.23.8"
 flyway = "10.15.0"
 
 koin = "4.1.0-Beta5"

@@ -85,6 +85,8 @@ naming:
     active: false
   MemberNameEqualsClassName:
     active: false
+  PackageNaming:
+    active: false
 
 performance:
   active: true
@@ -149,4 +151,6 @@ formatting:
   android: false
   autoCorrect: true
   NoWildcardImports:
+    active: false
+  PackageName:
     active: false

@@ -122,6 +122,10 @@ detekt {
     buildUponDefaultConfig = true
     autoCorrect = true
 }
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    exclude("**/build/**")
+}
+
 
 tasks.register<JavaExec>("applyMigration") {
     group = "database"
