@@ -1,10 +1,12 @@
 package io.github.nitkc_proken.freight.backend.database.columntype
 
+import io.github.nitkc_proken.freight.backend.database.tables.UsersTable.clientDefault
 import io.github.nitkc_proken.freight.backend.values.*
 import io.github.nitkc_proken.freight.backend.values.Bcrypt.Companion.LENGTH
 import org.jetbrains.exposed.sql.*
 import java.util.UUID
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 import kotlin.uuid.toKotlinUuid
 
@@ -34,3 +36,15 @@ fun Table.kuuid(
         this
     }
 ) = uuid(name).preprocess().transform({ it.toKotlinUuid() }, { it.toJavaUuid() })
+
+fun Column<Uuid>.autoGenerate() = clientDefault {
+    Uuid.random()
+}
+
+fun Table.nanoid(
+    name: String,
+    length: Int = 21,
+    preprocess: Column<String>.() -> Column<String> = {
+        this
+    }
+) = varchar(name, length).preprocess().transform({ NanoId.fromString(it) }, { it.value })

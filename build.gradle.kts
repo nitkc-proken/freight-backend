@@ -1,5 +1,4 @@
 import com.google.protobuf.gradle.id
-import com.google.protobuf.gradle.proto
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -88,7 +87,8 @@ dependencies {
 
     implementation(libs.spring.security.web)
     implementation(libs.bcprov.jdk18on)
-    //implementation(libs.spring.security.crypto)
+
+    implementation(libs.jnanoid)
 
     implementation(libs.dotenv)
 
