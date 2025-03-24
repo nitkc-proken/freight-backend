@@ -11,10 +11,10 @@ interface TokenRepository {
     suspend fun expireTokenFromUser(token: String): Boolean
 }
 
-fun TokenEntity.toModel() = Token(token.value, expiresAt)
+fun TokenEntity.toModel() = Token(token, expiresAt)
 
 @Serializable
-data class Token constructor(
-    val token: Uuid,
+data class Token(
+    val token: String,
     val expiresAt: Instant
 )

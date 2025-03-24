@@ -1,14 +1,17 @@
 package io.github.nitkc_proken.freight.backend.repository.impl
 
+import io.github.nitkc_proken.freight.backend.database.tables.TokensTable
 import io.github.nitkc_proken.freight.backend.entity.TokenEntity
 import io.github.nitkc_proken.freight.backend.entity.UserEntity
-import io.github.nitkc_proken.freight.backend.repository.*
+import io.github.nitkc_proken.freight.backend.repository.Token
+import io.github.nitkc_proken.freight.backend.repository.TokenRepository
+import io.github.nitkc_proken.freight.backend.repository.User
 import io.github.nitkc_proken.freight.backend.repository.User.Companion.toModel
+import io.github.nitkc_proken.freight.backend.repository.toModel
 import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
 import kotlinx.datetime.Instant
 import kotlinx.datetime.isDistantPast
 import org.koin.core.annotation.Single
-import kotlin.uuid.Uuid
 
 @Single
 class TokenRepositoryImpl : TokenRepository {
@@ -21,7 +24,7 @@ class TokenRepositoryImpl : TokenRepository {
     }
 
     override suspend fun getUserFromValidToken(token: String): User? = suspendTransaction {
-        val tokenEntity = TokenEntity.findById(Uuid.parse(token))
+        val tokenEntity = TokenEntity.find { TokensTable.token eq token }.singleOrNull()
         if (tokenEntity?.expiresAt?.isDistantPast == true) {
             tokenEntity.delete()
             return@suspendTransaction null
@@ -30,8 +33,9 @@ class TokenRepositoryImpl : TokenRepository {
     }
 
     override suspend fun expireTokenFromUser(token: String): Boolean = suspendTransaction {
-        val tokenEntity = TokenEntity.findById(Uuid.parse(token))
-        tokenEntity?.delete() ?: return@suspendTransaction false
+        val tokenEntity = TokenEntity.find { TokensTable.token eq token }.singleOrNull()
+        if (tokenEntity == null) return@suspendTransaction false
+        tokenEntity.delete()
         true
     }
 }

@@ -9,7 +9,7 @@ import kotlin.uuid.Uuid
 class TokenEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
     companion object : KUUIDEntityClass<TokenEntity>(TokensTable)
 
-    var token by TokensTable.id
+    val token by TokensTable.token
     var user by UserEntity referencedOn TokensTable.user
     var expiresAt by TokensTable.expiresAt
 }
