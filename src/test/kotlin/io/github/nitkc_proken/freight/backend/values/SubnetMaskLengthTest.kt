@@ -6,9 +6,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.filterNot
-import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.uByte
-import io.kotest.property.arbitrary.uInt
 import io.kotest.property.checkAll
 
 class SubnetMaskLengthTest : StringSpec({

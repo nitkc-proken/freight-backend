@@ -1,13 +1,12 @@
 package io.github.nitkc_proken.freight.backend.auth
 
+import io.github.nitkc_proken.freight.backend.feature.users.usersModule
 import io.github.nitkc_proken.freight.backend.plugins.KoinModule
 import io.github.nitkc_proken.freight.backend.repository.Token
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository
 import io.github.nitkc_proken.freight.backend.repository.User
 import io.github.nitkc_proken.freight.backend.testutils.clientWithDefault
 import io.github.nitkc_proken.freight.backend.testutils.configureRoutingTest
-import io.github.nitkc_proken.freight.backend.feature.users.usersModule
-import io.github.nitkc_proken.freight.backend.values.Argon2
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

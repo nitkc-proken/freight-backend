@@ -1,7 +1,7 @@
 package io.github.nitkc_proken.freight.backend.auth
 
-import io.github.nitkc_proken.freight.backend.feature.auth.model.LoginCredential
 import io.github.nitkc_proken.freight.backend.feature.auth.authModule
+import io.github.nitkc_proken.freight.backend.feature.auth.model.LoginCredential
 import io.github.nitkc_proken.freight.backend.plugins.KoinModule
 import io.github.nitkc_proken.freight.backend.repository.Token
 import io.github.nitkc_proken.freight.backend.repository.TokenRepository

@@ -12,12 +12,11 @@ class NetworkTest : StringSpec({
         val subnet2 = NetworkAddressWithMask.fromCIDROrNull("172.22.2.0/24")!!
         (subnet2 in nw2) shouldBe false
     }
-    "address range"{
+    "address range" {
         val nw = NetworkAddressWithMask.fromCIDROrNull("192.168.1.0/24")!!
         val range = nw.availableIPAddress()
         for (i in range) {
             println(i)
         }
-
     }
 })
