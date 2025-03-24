@@ -14,17 +14,10 @@ value class NetworkInterfaceName(val value: String) : Validatable {
     }
 
     companion object {
-        val NIC_NAME_CHARACTERS = ('a'..'z') + ('A'..'Z') + ('0'..'9') +
-            ('!'..'.') + (':'..'@') + ('{'..'~')
+        val NIC_NAME_CHARACTERS = (('a'..'z') + ('A'..'Z') + ('0'..'9')).toCharArray() +
+                "!\"#\$%&'()*+,-.:;<=>?@[]^_`{|}~".toCharArray()
 
-        fun generateRandomNICName(prefix: String = "fr8"): NetworkInterfaceName {
-            val random = java.util.Random()
-            val suffix = (1..(15 - prefix.length)).map {
-                NIC_NAME_CHARACTERS[random.nextInt(NIC_NAME_CHARACTERS.size)]
-            }.joinToString("")
-            return NetworkInterfaceName(prefix + suffix)
-        }
-
+        @Deprecated("Use StringEncoder")
         // UInt id部は最大6文字
         fun generateNICName(id: UInt, prefix: String = "f", suffix: String = ""): NetworkInterfaceName {
             val base = NIC_NAME_CHARACTERS.size.toUInt()

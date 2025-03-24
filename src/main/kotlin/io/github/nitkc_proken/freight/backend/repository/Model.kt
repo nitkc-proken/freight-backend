@@ -8,4 +8,8 @@ interface Model<I : Any> {
 
 interface EntityToModel<E, M : Model<*>> {
     fun E.toModel(): M
+
+    fun Iterable<E>.toModels(): List<M> {
+        return map { it.toModel() }
+    }
 }

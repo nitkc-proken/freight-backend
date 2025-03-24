@@ -1,33 +1,52 @@
 package io.github.nitkc_proken.freight.backend.repository.impl
 
-import com.github.dockerjava.api.model.HostConfig
 import io.github.nitkc_proken.freight.backend.entity.ContainerEntity
 import io.github.nitkc_proken.freight.backend.entity.NetworkEntity
-import io.github.nitkc_proken.freight.backend.grpc.gatewayClient
 import io.github.nitkc_proken.freight.backend.repository.Container
 import io.github.nitkc_proken.freight.backend.repository.Container.Companion.toModel
+import io.github.nitkc_proken.freight.backend.repository.Container.Companion.toModels
 import io.github.nitkc_proken.freight.backend.repository.ContainerRepository
-import io.github.nitkc_proken.freight.backend.repository.toModel
-import io.github.nitkc_proken.freight.backend.utils.dockerClient
 import io.github.nitkc_proken.freight.backend.utils.suspendTransaction
-import io.github.nitkc_proken.freight.backend.values.DockerId
-import io.github.nitkc_proken.freight.backend.values.IPv4Address
-import io.github.nitkc_proken.freight.backend.values.NetworkInterfaceName
-import org.jetbrains.exposed.dao.id.EntityID
 import org.koin.core.annotation.Single
-import java.util.*
 import kotlin.uuid.Uuid
 
 @Single
 class ContainerRepositoryImpl : ContainerRepository {
 
-    companion object {
-        private const val CONTAINER_IMAGE = "nicolaka/netshoot"
-        val DefaultHostConfig = HostConfig.newHostConfig()
-            .withNetworkMode("none")
+    override suspend fun list(): List<Container> = suspendTransaction {
+        ContainerEntity.all().toModels()
     }
 
-    override suspend fun updateNICNames(
+    override suspend fun get(id: Uuid): Container? = suspendTransaction {
+        ContainerEntity.findById(id)?.toModel()
+    }
+
+    override suspend fun create(t: Container): Container = suspendTransaction {
+        ContainerEntity.new(t.id) {
+            this.containerId = t.containerId
+            this.network = NetworkEntity[t.network.toEntityId()]
+            this.ipAddress = t.ipAddress
+            this.hostVEthName = t.hostVEthName
+            this.containerVEthName = t.containerVEthName
+
+        }.toModel()
+    }
+
+    override suspend fun update(t: Container): Container = suspendTransaction {
+        ContainerEntity[t.id].apply {
+            containerId = t.containerId
+            network = NetworkEntity[t.network.toEntityId()]
+            ipAddress = t.ipAddress
+            hostVEthName = t.hostVEthName
+            containerVEthName = t.containerVEthName
+        }.toModel()
+    }
+
+    override suspend fun delete(id: Uuid): Unit = suspendTransaction {
+        ContainerEntity[id].delete()
+    }
+
+    /*override suspend fun updateNICNames(
         containerEntity: ContainerEntity,
         vEthNetworkInterfaceName: NetworkInterfaceName,
         vEthContainerInterfaceName: NetworkInterfaceName,
@@ -71,5 +90,5 @@ class ContainerRepositoryImpl : ContainerRepository {
                 networkModel.vEthInterfaceNameCandidate,
                 networkModel.vEthContainerInterfaceNameCandidate
             )*/
-        }
+        }*/
 }

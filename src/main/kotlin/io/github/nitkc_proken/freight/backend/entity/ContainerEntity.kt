@@ -15,5 +15,5 @@ class ContainerEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
     var ipAddress by ContainersTable.ipAddress
     var hostVEthName by ContainersTable.hostVEthName
     var containerVEthName by ContainersTable.containerVEthName
-    val numericId by ContainersTable.numericId
+    var shortId by ContainersTable.shortId
 }
