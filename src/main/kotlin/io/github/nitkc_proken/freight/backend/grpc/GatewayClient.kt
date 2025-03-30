@@ -45,7 +45,6 @@ class GatewayClient(
                 this.tunInterfaceName = tunInterfaceName.value
                 this.vrfInterfaceName = vrfInterfaceName.value
                 this.bridgeInterfaceName = bridgeInterfaceName.value
-                vrfRouteTableId = network.vrfRouteNumber.toInt()
             }
         )
     }
@@ -60,7 +59,7 @@ class GatewayClient(
                 vrfInterfaceName = network.vrfInterfaceName.value
                 bridgeInterfaceName = network.bridgeInterfaceName.value
                 tunInterfaceName = network.tunInterfaceName.value
-                vrfRouteTableId = network.vrfRouteNumber.toInt()
+                vrfRouteTableId = network.vrfRouteTableId!!
             }
         )
     }
@@ -88,7 +87,7 @@ class GatewayClient(
                 this.containerNetworkAddress = network.containersNetworkAddressWithMask.address.value.toInt()
                 this.containerGatewayAddress =
                     network.containersNetworkAddressWithMask.availableIPAddress().last().value.toInt()
-                this.vrfRouteTableId = network.vrfRouteNumber.toInt()
+                this.vrfRouteTableId = network.vrfRouteTableId!!
             }
         )
     }

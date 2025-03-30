@@ -37,7 +37,8 @@ class NetworkService(
             network.copy(
                 tunInterfaceName = NetworkInterfaceName(res.tunInterfaceName),
                 vrfInterfaceName = NetworkInterfaceName(res.vrfInterfaceName),
-                bridgeInterfaceName = NetworkInterfaceName(res.bridgeInterfaceName)
+                bridgeInterfaceName = NetworkInterfaceName(res.bridgeInterfaceName),
+                vrfRouteTableId = res.vrfRouteTableId,
             )
         )
     }
@@ -49,6 +50,7 @@ class NetworkService(
                 tunInterfaceName = null,
                 vrfInterfaceName = null,
                 bridgeInterfaceName = null,
+                vrfRouteTableId = null,
             ),
         )
     }
