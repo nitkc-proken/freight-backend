@@ -14,8 +14,11 @@ object NetworksTable : KUUIDTable() {
     val bridgeInterfaceName = networkInterfaceName("bridge_interface_name").nullable()
     val owner = reference("owner", UsersTable)
 
-    val numericId = uinteger("numeric_id").autoIncrement().uniqueIndex("nw_numeric_id")
-
+    // ftun-<short_id>
+    // fvrf-<short_id>
+    // fbr-<short_id> → 15 chars
+    val shortId = nanoid("short_id", 10).uniqueIndex()
+    val vrfRouteTableId = integer("vrf_route_table_id").nullable()
     init {
         uniqueIndex("full_name", name, owner)
     }

@@ -7,28 +7,11 @@ import io.github.nitkc_proken.freight.backend.entity.UserEntity
 import io.github.nitkc_proken.freight.backend.repository.User.Companion.toModel
 import io.github.nitkc_proken.freight.backend.values.*
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import kotlin.uuid.Uuid
 
-interface NetworkRepository {
-    suspend fun createNetwork(
-        name: String,
-        networkAddressWithMask: NetworkAddressWithMask,
-        containerNetworkAddressWithMask: NetworkAddressWithMask,
-        clientNetworkAddressWithMask: NetworkAddressWithMask,
-        owner: EntityID<Uuid>,
-    ): Network
-
-    suspend fun updateNICNames(
-        network: EntityID<Uuid>,
-        tunInterfaceName: NetworkInterfaceName,
-        vrfInterfaceName: NetworkInterfaceName,
-        bridgeInterfaceName: NetworkInterfaceName,
-    ): Network
-
-    suspend fun clearNICNames(network: EntityID<Uuid>): Network
-
-    suspend fun listAllNetworks(): List<Network>
+interface NetworkRepository : Repository<Network, Uuid> {
 
     suspend fun listOwnedNetworks(user: EntityID<Uuid>): List<Network>
 
@@ -40,26 +23,31 @@ interface NetworkRepository {
 }
 
 @Serializable
-data class Network constructor(
-    val id: Uuid,
-    val numericId: UInt,
+data class Network(
+    val id: Uuid = Uuid.random(),
     val name: String,
     val networkAddressWithMask: NetworkAddressWithMask,
     val containersNetworkAddressWithMask: NetworkAddressWithMask,
     val clientsNetworkAddressWithMask: NetworkAddressWithMask,
     val owner: User,
-    val members: List<NetworkMember>,
+    val members: List<NetworkMember> = listOf(
+        NetworkMember(owner, Permissions.Owner)
+    ),
 
-    val dockerNetworkId: DockerId?,
-    val tunInterfaceName: NetworkInterfaceName?,
-    val vrfInterfaceName: NetworkInterfaceName?,
-    val bridgeInterfaceName: NetworkInterfaceName?,
+    val dockerNetworkId: DockerId? = null,
+    val tunInterfaceName: NetworkInterfaceName? = null,
+    val vrfInterfaceName: NetworkInterfaceName? = null,
+    val bridgeInterfaceName: NetworkInterfaceName? = null,
+    val shortId: NanoId = NetworkNanoIdGenerator.random(),
+    val vrfRouteTableId: Int? = null,
 ) : Model<Uuid> {
 
     companion object : EntityToModel<NetworkEntity, Network> {
+        private val NetworkNanoIdGenerator =
+            NanoIdGenerator(alphabet = NetworkInterfaceName.NIC_NAME_CHARACTERS, size = 10)
+
         override fun NetworkEntity.toModel(): Network = Network(
             id.value,
-            numericId,
             name,
             networkAddr,
             containersNetworkAddr,
@@ -70,14 +58,15 @@ data class Network constructor(
             tunInterfaceName,
             vrfInterfaceName,
             bridgeInterfaceName,
+            shortId,
+            vrfRouteTableId,
         )
     }
 
-    val tunInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-tun")
-    val vrfInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-vrf")
-    val bridgeInterfaceNameCandidate get() = NetworkInterfaceName.generateNICName(numericId, suffix = "-br")
+    val tunInterfaceNameCandidate get() = NetworkInterfaceName("ftun-$shortId")
+    val vrfInterfaceNameCandidate get() = NetworkInterfaceName("fvrf-$shortId")
+    val bridgeInterfaceNameCandidate get() = NetworkInterfaceName("fbr-$shortId")
 
-    val vrfRouteNumber get() = numericId + 1000u
     override fun toEntityId(): EntityID<Uuid> = EntityID(id, NetworksTable)
 }
 
@@ -87,20 +76,6 @@ data class NetworkMember(
     val permission: Permissions
 )
 
-fun NetworkEntity.toModel(): Network = Network(
-    id.value,
-    numericId,
-    name,
-    networkAddr,
-    containersNetworkAddr,
-    clientsNetworkAddr,
-    owner.toModel(),
-    members.map { it.toModel() },
-    dockerNetworkId,
-    tunInterfaceName,
-    vrfInterfaceName,
-    bridgeInterfaceName,
-)
 
 fun NetworkMemberEntity.toModel(): NetworkMember = NetworkMember(
     member.toModel(),

@@ -53,12 +53,12 @@ fun Application.configureRouting() {
                 "指定したネットワークを取得する",
                 {
                     request {
-                        pathParameter<String>("owner", {
+                        pathParameter<String>("owner") {
                             description = "ネットワークの名前"
-                        })
-                        pathParameter<String>("name", {
+                        }
+                        pathParameter<String>("name") {
                             description = "ネットワークの名前"
-                        })
+                        }
                     }
                     errorResponses(HttpStatusCode.Unauthorized, HttpStatusCode.NotFound)
                 }

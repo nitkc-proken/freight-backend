@@ -14,12 +14,14 @@ class NetworkService(
     val userRepository: UserRepository,
 ) {
     suspend fun createNetwork(user: User, createNetworkRequest: CreateNetworkRequest): Network {
-        val network = networkRepository.createNetwork(
-            owner = user.toEntityId(),
-            name = createNetworkRequest.name,
-            networkAddressWithMask = createNetworkRequest.networkAddress,
-            containerNetworkAddressWithMask = createNetworkRequest.containerAddress,
-            clientNetworkAddressWithMask = createNetworkRequest.clientAddress
+        val network = networkRepository.create(
+            Network(
+                owner = user,
+                name = createNetworkRequest.name,
+                networkAddressWithMask = createNetworkRequest.networkAddress,
+                containersNetworkAddressWithMask = createNetworkRequest.containerAddress,
+                clientsNetworkAddressWithMask = createNetworkRequest.clientAddress
+            )
         )
         return initNetwork(network)
     }
@@ -31,19 +33,23 @@ class NetworkService(
             network.vrfInterfaceNameCandidate,
             network.bridgeInterfaceNameCandidate
         )
-        return networkRepository
-            .updateNICNames(
-                network.toEntityId(),
-                NetworkInterfaceName(res.tunInterfaceName),
-                NetworkInterfaceName(res.vrfInterfaceName),
-                NetworkInterfaceName(res.bridgeInterfaceName)
+        return networkRepository.update(
+            network.copy(
+                tunInterfaceName = NetworkInterfaceName(res.tunInterfaceName),
+                vrfInterfaceName = NetworkInterfaceName(res.vrfInterfaceName),
+                bridgeInterfaceName = NetworkInterfaceName(res.bridgeInterfaceName)
             )
+        )
     }
 
     suspend fun cleanUpNetwork(network: Network): Network {
         gatewayClient.cleanUpNetwork(network)
-        return networkRepository.clearNICNames(
-            network.toEntityId(),
+        return networkRepository.update(
+            network.copy(
+                tunInterfaceName = null,
+                vrfInterfaceName = null,
+                bridgeInterfaceName = null,
+            ),
         )
     }
 

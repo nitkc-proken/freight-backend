@@ -10,8 +10,6 @@ import kotlin.uuid.Uuid
 class NetworkEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
     companion object : KUUIDEntityClass<NetworkEntity>(NetworksTable)
 
-    val numericId by NetworksTable.numericId
-
     var name by NetworksTable.name
     var networkAddr by NetworksTable.networkAddr
     var containersNetworkAddr by NetworksTable.containersNetworkAddr
@@ -20,8 +18,8 @@ class NetworkEntity(id: EntityID<Uuid>) : KUUIDEntity(id) {
     var tunInterfaceName by NetworksTable.tunInterfaceName
     var vrfInterfaceName by NetworksTable.vrfInterfaceName
     var bridgeInterfaceName by NetworksTable.bridgeInterfaceName
-
+    var shortId by NetworksTable.shortId
+    var vrfRouteTableId by NetworksTable.vrfRouteTableId
     var owner by UserEntity referencedOn NetworksTable.owner
-
     val members by NetworkMemberEntity referrersOn NetworkMembersTable.network
 }
