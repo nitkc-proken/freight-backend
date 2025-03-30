@@ -1,5 +1,6 @@
 package io.github.nitkc_proken.freight.backend.utils
 
+import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
@@ -24,6 +25,6 @@ private val dockerHttpClient by lazy {
         .build()
 }
 
-val dockerClient by lazy {
+val dockerClient: DockerClient by lazy {
     DockerClientImpl.getInstance(dockerConfig, dockerHttpClient)
 }
